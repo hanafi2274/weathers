@@ -9,5 +9,5 @@ app.set('view engine', 'ejs');
 app.use('/assets',express.static(path.join(__dirname, 'assets')));
 app.use('/', appRouting);
 
-app.listen('20',()=> console.log('Server Running at port: 20'));
+app.listen('3344',()=> console.log('Server Running at port: 3344'));
 
