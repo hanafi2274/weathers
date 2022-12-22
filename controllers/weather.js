@@ -1,7 +1,9 @@
 const moment = require('moment');
 var parseString = require('xml2js');
 const KODE_SBY = "501306"
+const area = 'DigitalForecast-JawaTimur.xml'
 const fs = require('fs');
+const axios = require('axios');
 
 exports.index = async (req, res) => {
     try{
@@ -15,14 +17,20 @@ exports.index = async (req, res) => {
             redirect: 'follow',
             headers:{}
         };
-        let result = await fetch(`http://202.90.198.212/logger/log-${tgl}.txt`, get);
-        let bmkg_weather = await fetch(`https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-JawaTimur.xml`, get);
-        let bmkg_earthquake = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json`, get);
-        let bmkg_earthquake2 = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json`, get);
-        bmkg_weather = await bmkg_weather.text()
-        result = await result.text();
-        bmkg_earthquake = await bmkg_earthquake.json();
-        bmkg_earthquake2 = await bmkg_earthquake2.json();
+        let bmkg_earthquake2 = await axios({method: 'get',url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',headers: { }});
+        let result = await axios({method: 'get',url: `http://202.90.198.212/logger/log-${tgl}.txt`,headers: { }});
+        let bmkg_weather = await axios({method: 'get',url: `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`,headers: { }});
+        bmkg_earthquake2 = bmkg_earthquake2.data;
+        result = result.data;
+        bmkg_weather = bmkg_weather.data;
+        // let result = await fetch(`http://202.90.198.212/logger/log-${tgl}.txt`, get);
+        // let bmkg_weather = await fetch(`https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`, get);
+        // let bmkg_earthquake = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json`, get);
+        // let bmkg_earthquake2 = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json`, get);
+        // bmkg_weather = await bmkg_weather.text()
+        // result = await result.text();
+        // bmkg_earthquake = await bmkg_earthquake.json();
+        // bmkg_earthquake2 = await bmkg_earthquake2.json();
         bmkg_earthquake2.Infogempa.gempa['Shakemap']='https://data.bmkg.go.id/DataMKG/TEWS/'+bmkg_earthquake2.Infogempa.gempa['Shakemap']
         const Array = result.split("\r");
         var stw18 = Array.filter(function(data){
