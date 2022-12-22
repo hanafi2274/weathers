@@ -98,3 +98,8 @@ exports.index = async (req, res) => {
         return res.status(500).json({status:500,message:e.message });
     }
 };
+
+exports.base = async (req, res) => {
+    return res.render('home');
+    return console.log(res.status(200).json({status:200,message:''}));
+};
