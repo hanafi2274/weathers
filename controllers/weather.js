@@ -12,25 +12,12 @@ exports.index = async (req, res) => {
         if (!validate_date) {
             return res.status(401).json({ message:'failed',data: 'date format invalid' });
         }
-        var get = {
-            method: 'GET',
-            redirect: 'follow',
-            headers:{}
-        };
         let bmkg_earthquake2 = await axios({method: 'get',url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',headers: { }});
         let result = await axios({method: 'get',url: `http://202.90.198.212/logger/log-${tgl}.txt`,headers: { }});
         let bmkg_weather = await axios({method: 'get',url: `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`,headers: { }});
         bmkg_earthquake2 = bmkg_earthquake2.data;
         result = result.data;
         bmkg_weather = bmkg_weather.data;
-        // let result = await fetch(`http://202.90.198.212/logger/log-${tgl}.txt`, get);
-        // let bmkg_weather = await fetch(`https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`, get);
-        // let bmkg_earthquake = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json`, get);
-        // let bmkg_earthquake2 = await fetch(`https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json`, get);
-        // bmkg_weather = await bmkg_weather.text()
-        // result = await result.text();
-        // bmkg_earthquake = await bmkg_earthquake.json();
-        // bmkg_earthquake2 = await bmkg_earthquake2.json();
         bmkg_earthquake2.Infogempa.gempa['Shakemap']='https://data.bmkg.go.id/DataMKG/TEWS/'+bmkg_earthquake2.Infogempa.gempa['Shakemap']
         const Array = result.split("\r");
         var stw18 = Array.filter(function(data){
@@ -84,17 +71,10 @@ exports.index = async (req, res) => {
             "tegangan_baterai":data_txt[9],
             "temperature_logger":data_txt[10]
         }
-        // fs.writeFileSync("./assets/data/foo.json", JSON.stringify({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:{now:bmkg_earthquake2.Infogempa.gempa,update:bmkg_earthquake.Infogempa.gempa}}}));
-        return res.status(200).json({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:bmkg_earthquake2.Infogempa.gempa}})
-        return res.status(200).json(
-            {
-                status:200,
-                message:'success',
-                timestamps:moment().unix(),
-                path:'/assets/data/foo.json'
-                // data:{logger:logger,weather:cities,earthquake:bmkg_earthquake.Infogempa.gempa}
-            }
-        );
+        var data_js = fs.readFileSync('./assets/data/data.txt', 'utf8');
+        fs.writeFileSync("./assets/data/weather.js",`var data_all=${JSON.stringify({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:bmkg_earthquake2.Infogempa.gempa}})};\n`+data_js);
+        return res.status(200).json({status:200,message:'success',path:'/assets/data/weather.js'});
+        // return res.status(200).json({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:bmkg_earthquake2.Infogempa.gempa}})
     }catch(e){
         return res.status(500).json({status:500,message:e.message });
     }
