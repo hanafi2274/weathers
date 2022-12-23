@@ -73,6 +73,7 @@ exports.index = async (req, res) => {
         }
 
         const logger = {
+            "datetime":data_txt[1],
             "wind_speed":data_txt[2],
             "wind_direction_degree":data_txt[3],
             "temperature":data_txt[4],
