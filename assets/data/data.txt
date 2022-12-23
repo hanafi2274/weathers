@@ -1,0 +1,1640 @@
+const d = new Date();
+var tanggal_temp
+var slider = document.getElementById("start_slider")
+slider.innerHTML = ""
+const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+setInterval(showTime, 1000);
+
+function showTime() {
+    let time = new Date();
+    let hour = time.getHours();
+    let min = time.getMinutes();
+    let sec = time.getSeconds();
+   
+
+    
+
+    hour = hour < 10 ? "0" + hour : hour;
+    min = min < 10 ? "0" + min : min;
+    sec = sec < 10 ? "0" + sec : sec;
+
+    let currentTime = hour + ":" +
+        min + ":" + sec ;
+
+    document.getElementById("jam_digital")
+        .innerHTML = currentTime;
+}
+
+showTime();
+// KODE CUACA
+
+function kode_cuaca(kode_cuaca2) {
+    if (kode_cuaca2 == 0) {
+        return 'Cerah'
+    } else if (kode_cuaca2 == 1) {
+        return 'Cerah Berawan'
+    } else if (kode_cuaca2 == 2) {
+        return 'Cerah Berawan'
+    } else if (kode_cuaca2 == 3) {
+        return 'Berawan'
+    } else if (kode_cuaca2 == 4) {
+        return 'Berawan Tebal'
+    } else if (kode_cuaca2 == 5) {
+        return 'Udara Kabur'
+    } else if (kode_cuaca2 == 10) {
+        return 'Asap'
+    } else if (kode_cuaca2 == 45) {
+        return 'Kabut'
+    } else if (kode_cuaca2 == 60) {
+        return 'Hujan Ringan'
+    } else if (kode_cuaca2 == 61) {
+        return 'Hujan Lebat'
+    } else if (kode_cuaca2 == 80) {
+        return 'Hujan Lokal'
+    } else if (kode_cuaca2 == 95) {
+        return 'Hujan Petir'
+    } else if (kode_cuaca2 == 97) {
+        return 'Hujan Petir'
+    }
+}
+var convert = {
+    toCompass: function (degrees) {
+        if (degrees) {
+            return ['Utara', 'Utara-Timur Laut', 'Timur Laut', 'Timur-Timur Laut', 'Timur', 'Timur-Tenggara', 'Tenggara', 'Selatan-Tenggara', 'Selatan', 'Selatan-Barat Daya',
+                'Barat Daya', 'Barat-Barat Daya', 'Barat', 'Barat-Barat Laut', 'Barat Laut', 'Utara-Barat Laut', 'Utara'
+            ][Math.round(degrees / 11.25 / 2)];
+
+        } else {
+            return "-"
+        }
+    }
+}
+
+function rotateCompas(x) {
+    if (x) {
+        return [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5,
+            225, 247.5, 270, 292.5, 315, 337.5, 360
+        ][Math.round(x / 11.25 / 2)];
+
+    } else {
+        return "-"
+    }
+}
+var logger = false;
+var logger_weather = false;
+var list_data;
+var arah_angin;
+let day = days[d.getDay()];
+let month = months[d.getMonth()]
+
+function ms(i) {
+    kmh = (i * 36).toFixed(1);
+    return kmh.toString();
+}
+// tanggal hari ini
+document.getElementById("tanggal").innerHTML = `${day}, ${d.getDate()} ${month} ${d.getFullYear()}`
+// console.log(data_all.data.weather[0].city)
+var check_day, check_minmax, check_minmax_tomorrow, data_tomorrow
+var check_index_weather = [],
+    check_index_weather_tomorrow = [],
+    temperature_today = [],
+    temperature_tomorrow = [],
+    wind_speed_today = [],
+    wind_speed_tomorrow = [],
+    wind_direction_today = [],
+    wind_direction_tomorrow = []
+//menyocokan data json satu kota atau semua kota
+// console.log(data_all.data.logger)
+if (data_all.data.logger.datetime) {
+    if (data_all.data.logger.datetime.slice(0, 8) == `${d.getDate()}${d.getMonth()+1}${d.getFullYear()}`) {
+        list_data = true
+        logger = true
+
+        var temp_page1 = document.createElement("div")
+        temp_page1.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
+        <div style="  height: 500px; width: auto;">
+            <div class=" "
+                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+                <div class="row ">
+                    <div class="text-color" style="text-align: center;  font-size: 30px;">
+                        SURABAYA-HARI INI
+                    </div>
+                    <div class="col" style="margin-left: 100px; margin-top: 20px;">
+                        <img src="./sidefiles/Winder-Base.png" alt="...."
+                            style="width: 250px;z-index:100; position:absolute;height: 250px; align-content: center; border-radius: 5px;">
+                            <img id="base_compas" src="./sidefiles/Winder-Blank.png" alt="...."
+                            style="width: 250px; z-index:300; position:relative; height: 250px; align-content: center; border-radius: 5px;">
+                    </div>
+                    <div class="col" style="margin-right: 110px; margin-top: 20px; ">
+                        <div class="card" style="font-size:18px;width: 300px; height: 200px; border-color: transparent;">
+                            <div>
+                                <div class="text-color"
+                                    style=" width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+        
+                                    <div style="margin-left:10px; text-align: center; font-size: 30px;" >
+                                        <div class="row" >
+                                            <div class="col" style="color:yellow;">
+                                               Suhu udara
+                                            </div>
+        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" style="color: white;">
+                                               ${data_all.data.logger['temperature']}°C
+                                            </div>
+        
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col" style="color:yellow;">
+                                                Kelembapan
+                                            </div>
+        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" style="color: white;">
+                                            ${data_all.data.logger['rh']}%
+                                            </div>
+        
+                                        </div>
+        
+        
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin: 10px; font-size: 25px; text-transform:uppercase; ">
+                    <div  style="text-align: center; color: #B1F2FF;">
+                       KECEPATAN ANGIN :  ${ms(data_all.data.logger['wind_speed'])} Km/jam
+                    </div>
+                    <div  style="text-align: center; color: yellow;">
+                       ARAH ANGIN : ${convert.toCompass(data_all.data.logger['wind_direction_degree'])}
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+        </div>`
+        slider.appendChild(temp_page1)
+        document.getElementById("base_compas").style.transform = `rotate(${rotateCompas(data_all.data.logger.wind_direction_degree)}deg)`
+    }
+}
+
+// pengulangan sejumlah kota 
+
+
+
+for (let index = 0; index < data_all.data.weather.length; index++) {
+    try {
+        //mengecek temperature
+        for (let x = 0; x < data_all.data.weather[index].parameter[5].datetime.length; x++) {
+            if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                temperature_today[0] = x
+            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                temperature_today[1] = x
+
+            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                temperature_today[2] = x
+
+            }
+
+            if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                temperature_tomorrow[0] = x
+            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                temperature_tomorrow[1] = x
+
+            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                temperature_tomorrow[2] = x
+
+            }
+
+        }
+        //mengecek weather
+        for (let x = 0; x < data_all.data.weather[index].parameter[6].datetime.length; x++) {
+            if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                check_index_weather[0] = data_all.data.weather[index].parameter[6].value[x]
+            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                check_index_weather[1] = data_all.data.weather[index].parameter[6].value[x]
+
+            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                check_index_weather[2] = data_all.data.weather[index].parameter[6].value[x]
+
+            }
+
+            if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                check_index_weather_tomorrow[0] = data_all.data.weather[index].parameter[6].value[x]
+            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                check_index_weather_tomorrow[1] = data_all.data.weather[index].parameter[6].value[x]
+
+            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                check_index_weather_tomorrow[2] = data_all.data.weather[index].parameter[6].value[x]
+
+            }
+        }
+        // console.log(check_index_weather)
+        //mengecek wind direction
+        for (let x = 0; x < data_all.data.weather[index].parameter[7].datetime.length; x++) {
+            if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                wind_direction_today[0] = x
+            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                wind_direction_today[1] = x
+
+            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                wind_direction_today[2] = x
+
+            }
+
+            if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                wind_direction_tomorrow[0] = x
+            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                wind_direction_tomorrow[1] = x
+
+            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                wind_direction_tomorrow[2] = x
+
+            }
+        }
+        // console.log(wind_direction_tomorrow)
+        //mengecek wind speed
+        for (let x = 0; x < data_all.data.weather[index].parameter[8].datetime.length; x++) {
+            if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                wind_speed_today[0] = x
+            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                wind_speed_today[1] = x
+
+            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                wind_speed_today[2] = x
+
+            }
+
+            if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                wind_speed_tomorrow[0] = x
+            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                wind_speed_tomorrow[1] = x
+
+            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                wind_speed_tomorrow[2] = x
+
+            }
+        }
+
+        // pengecekan data tanggal untuk tampil
+        if (data_all.data.weather[index].parameter[6].datetime[1].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
+
+            check_day = 1
+            // check_index_weather = [1, 2, 3]
+            // check_index_weather_tomorrow = [5, 6, 7]
+            check_minmax_tomorrow = 1
+            check_minmax = 0
+            data_tomorrow = true
+        } else if (data_all.data.weather[index].parameter[6].datetime[5].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
+            check_day = 5
+            // check_index_weather = [5, 6, 7]
+            // check_index_weather_tomorrow = [9, 10, 11]
+            check_minmax = 1
+            check_minmax_tomorrow = 2
+            data_tomorrow = true
+        } else if (data_all.data.weather[index].parameter[6].datetime[9].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
+            check_day = 9
+            // check_index_weather = [9, 10, 11]
+            check_minmax = 2
+            data_tomorrow = false
+        }
+    } catch {}
+    // console.log(check_day)
+    //penyocokan data yang ditampilkan untuk data hari ini
+    if (check_day) {
+        list_data = true
+        if (index == 0 && logger == false) {
+            logger_weather = true
+
+            var temp_div = document.createElement("div")
+            temp_div.innerHTML = `  
+                <div class="carousel-item active " data-bs-interval="5000">
+                        <div>
+                            <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
+                                <div class=" "
+                                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+                                    <div class="title_jadwaldata1" style="width:800px">
+                                        <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
+                                        ${data_all.data.weather[index].city}-HARI INI
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:15px; ">
+                                        <section class="card-area">
+                                            <!-- Card: 1 -->
+                                            <section class="card-section">
+                                                <div class="card">
+                                                    <div class="flip-card">
+                                                        <div class="flip-card__">
+                                                            <div class="card-front">
+                                                                <div class="card-front__tp card-front__tp--camping"
+                                                                    style="text-transform: uppercase;">
+                                                                    <p style="font-size: 30px;">Pagi</p>
+                                                          
+                                                                    <img src="./sidefiles/${check_index_weather[0]}am.png"
+                                                                        style="width:100px;" alt="...">
+                                                              
+                                                                <p class="card-front__text-price">
+                                                                ${kode_cuaca(check_index_weather[0])}
+                                                            </p>
+                                                                </div>
+    
+                                                                <div class="card-front__bt">
+                                                                    <p
+                                                                        class="card-front__text-view card-front__text-view--camping">
+                                                                        ${data_all.data.weather[index].parameter[5].value[temperature_today[0]]?data_all.data.weather[index].parameter[5].value[temperature_today[0]]:"-"} ( °C )
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+    
+                                            <!-- Card: 2 -->
+                                            <section class="card-section">
+                                                <div class="card">
+                                                    <div class="flip-card">
+                                                        <div class="flip-card__">
+                                                            <div class="card-front">
+                                                                <div class="card-front__tp card-front__tp--camping"
+                                                                    style="text-transform: uppercase;">
+                                                                    <p style="font-size:30px ;">Siang</p>
+                                                                   
+                                                                    <img src="./sidefiles/${check_index_weather[1]}am.png"
+                                                                        style="width:100px;" alt="...">
+                                                             
+                                                                <p class="card-front__text-price">
+                                                                ${kode_cuaca(check_index_weather[1])}
+                                                            </p>
+                                                                </div>
+    
+                                                                <div class="card-front__bt">
+                                                                    <p
+                                                                        class="card-front__text-view card-front__text-view--camping">
+                                                                        ${data_all.data.weather[index].parameter[5].value[temperature_today[1]]?data_all.data.weather[index].parameter[5].value[temperature_today[1]]:"-"} ( °C )
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+    
+                                            <!-- Card: 3 -->
+                                            <section class="card-section">
+                                                <div class="card">
+                                                    <div class="flip-card">
+                                                        <div class="flip-card__">
+                                                            <div class="card-front">
+                                                                <div class="card-front__tp card-front__tp--camping"
+                                                                    style="text-transform: uppercase;">
+                                                                    <p style="font-size:30px;">Malam</p>
+                                                                   
+                                                                    <img src="./sidefiles/${check_index_weather[2]}pm.png"
+                                                                        style="width:100px;" alt="...">
+                                                                        </p>
+                                                            
+                                                                <p class="card-front__text-price">
+                                                                ${kode_cuaca(check_index_weather[2])}
+                                                            </p>
+                                                                </div>
+    
+                                                                <div class="card-front__bt">
+                                                                    <p
+                                                                        class="card-front__text-view card-front__text-view--camping">
+                                                                        ${data_all.data.weather[index].parameter[5].value[temperature_today[2]]?data_all.data.weather[index].parameter[5].value[temperature_today[2]]:"-"} ( °C )
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+    
+                                        </section>
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item ">
+                        <div id="data2">
+                            <div class="text-color"
+                                style="background-color:transparent;  height: 500px; width: auto; ">
+                                <div class=" "
+                                    style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
+                                    <div class="title_jadwaldata1" style="width:800px">
+                                        <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
+                                        ${data_all.data.weather[index].city}-HARI INI
+                                        </div>
+                                    </div>
+                                    <div class="row " style="margin-top:15px">
+                                        <div class="col ">
+                                            <div class="card"
+                                                style="background-color: #2d378f ;width: 384px; height:150px; margin: 0 auto;">
+                                                <div style="margin-top: 10px;">
+                                                    <div style="color: yellow ; width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                        Suhu Udara
+                                                    </div>
+                                                    <div style="text-align: center;">
+                                                        <p class="card-text" id="suhu" style="font-size: 30px; font-weight:400;">
+                                                        ${data_all.data.weather[index].parameter[4].value[check_minmax]?data_all.data.weather[index].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax]?data_all.data.weather[index].parameter[2].value[check_minmax]:"-"} ( °C )
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col ">
+                                            <div class="card"
+                                                style="background-color:#2d378f  ;width: 384px; height:150px; margin: 0 auto;">
+                                                <div style="margin-top: 10px;">
+                                                    <div style="color: yellow ; width: auto; height: 50px; text-align:center; text-transform:uppercase; font-size: 25px; font-weight:400;">
+                                                        Kelembapan
+                                                    </div>
+                                                    <div  style="text-align: center;">
+                                                        <p class="card-text" id="kelembapan" style="font-size: 30px; font-weight:400;">
+                                                        ${data_all.data.weather[index].parameter[3].value[check_minmax]?data_all.data.weather[index].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax]?data_all.data.weather[index].parameter[1].value[check_minmax]:"-"} ( % )
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:15px">
+                                        <div class="col ">
+                                            <div class="card"
+                                                style="background-color: #2d378f;width: 384px; height:150px; margin: 0 auto;">
+                                                <div style="margin-top: 10px;">
+                                                    <div style="color: yellow ; width: auto; height: 50px; text-align:center; font-size: 25px; text-transform:uppercase; font-weight:400;">
+                                                        Arah Angin
+                                                    </div>
+                                                    <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Pagi
+                                                            </div>
+                                                            <div class="col" id="arah1">
+                                                                ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[0]])}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Siang
+                                                            </div>
+                                                            <div class="col" id="arah2">
+                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[1]])}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Malam
+                                                            </div>
+                                                            <div class="col" id="arah3">
+                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[2]])}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col ">
+                                            <div class="card"
+                                                style="width: 384px; height:150px; margin: 0 auto;background-color: #2d378f;">
+                                                <div style="margin-top: 10px;">
+                                                    <div style="color: yellow ; width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                        Kecepatan Angin
+                                                    </div>
+                                                    <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                        <div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    Pagi
+                                                                </div>
+                                                                <div class="col" id="kecepatan1">
+                                                                ${data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]:"-"}
+                                                                </div>
+                                                                <div class="col" id="kecepatan1">
+                                                                    Km/jam
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    Siang
+                                                                </div>
+                                                                <div class="col" id="kecepatan2">
+                                                                ${data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]:"-"}
+                                                                </div>
+                                                                <div class="col" id="kecepatan2">
+                                                                    Km/jam
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    Malam
+                                                                </div>
+                                                                <div class="col" id="kecepatan3">
+                                                                ${data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]:"-"}
+                                                                </div>
+                                                                <div class="col" id="kecepatan3">
+                                                                    Km/jam
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+            `
+            slider.appendChild(temp_div)
+            if (data_tomorrow == true) {
+
+                var temp_div2 = document.createElement("div")
+                temp_div2.innerHTML = `
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div>
+                        <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
+                            <div class=" "
+                            style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-ESOK HARI
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px; ">
+                                    <section class="card-area">
+                                        <!-- Card: 1 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size: 30px;">Pagi</p>
+                                                                
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[0]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                         
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[0])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 2 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px ;">Siang</p>
+                                                               
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[1]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                           
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[1])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 3 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px;">Malam</p>
+                                                           
+                                                                <img src="/sidefiles/${check_index_weather_tomorrow[2]}pm.png"
+                                                                    style="width:100px;" alt="...">
+                                                          
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[2])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                    </section>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item ">
+                    <div id="data2">
+                        <div class="text-color"
+                            style="background-color:transparent;  height: 500px; width: auto; ">
+                            <div class=" "
+                                style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-ESOK HARI
+                                    </div>
+                                </div>
+                                <div class="row " style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Suhu Udara
+                                                </div>
+                                                <div style="text-align: center;">
+                                                    <p class="card-text" id="suhu" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]:"-"} ( °C )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color:#2d378f  ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style=" color: yellow ;width: auto; height: 50px; text-align:center; text-transform:uppercase; font-size: 25px; font-weight:400;">
+                                                    Kelembapan
+                                                </div>
+                                                <div  style="text-align: center;">
+                                                    <p class="card-text" id="kelembapan" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style=" color: yellow ;width: auto; height: 50px; text-align:center; font-size: 25px; text-transform:uppercase; font-weight:400;">
+                                                    Arah Angin
+                                                </div>
+                                                <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Pagi
+                                                        </div>
+                                                        <div class="col" id="arah1">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[0]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Siang
+                                                        </div>
+                                                        <div class="col" id="arah2">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[1]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Malam
+                                                        </div>
+                                                        <div class="col" id="arah3">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[2]])}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="width: 384px; height:150px; margin: 0 auto;background-color: #2d378f;">
+                                            <div style="margin-top: 10px;">
+                                                <div style=" color: yellow ;width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Kecepatan Angin
+                                                </div>
+                                                <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Pagi
+                                                            </div>
+                                                            <div class="col" id="kecepatan1">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan1">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Siang
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Malam
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+                slider.appendChild(temp_div2)
+
+            }
+        } else {
+            logger_weather = false
+
+            // console.log(data_all.data.weather[index].parameter[5])
+            // console.log(convert.toCompass(data_all.data.weather[index].parameter[7].value[1]));
+            var temp_div = document.createElement("div")
+            temp_div.innerHTML = `  
+            <div class="carousel-item" data-bs-interval="5000">
+                    <div>
+                        <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
+                            <div class=" "
+                            style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-HARI INI
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px; ">
+                                    <section class="card-area">
+                                        <!-- Card: 1 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size: 30px;">Pagi</p>
+                                                              
+                                                                <img src="./sidefiles/${check_index_weather[0]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                           
+                                                                <p class="card-front__text-price">
+                                                                ${kode_cuaca(check_index_weather[0])}
+                                                            </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[0]]?data_all.data.weather[index].parameter[5].value[temperature_today[0]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 2 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px ;">Siang</p>
+                                                                
+                                                                <img src="./sidefiles/${check_index_weather[1]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                        
+                                                       
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather[1])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[1]]?data_all.data.weather[index].parameter[5].value[temperature_today[1]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 3 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px;">Malam</p>
+                                                            
+                                                                <img src="./sidefiles/${check_index_weather[2]}pm.png"
+                                                                    style="width:100px;" alt="...">
+                                                           
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather[2])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[2]]?data_all.data.weather[index].parameter[5].value[temperature_today[2]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                    </section>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item ">
+                    <div id="data2">
+                        <div class="text-color"
+                            style="background-color:transparent;  height: 500px; width: auto; ">
+                            <div class=" "
+                                style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-HARI INI
+                                    </div>
+                                </div>
+                                <div class="row " style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ;width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Suhu Udara
+                                                </div>
+                                                <div style="text-align: center;">
+                                                    <p class="card-text" id="suhu" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax]?data_all.data.weather[index].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax]?data_all.data.weather[index].parameter[2].value[check_minmax]:"-"} ( °C )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color:#2d378f  ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; text-align:center; text-transform:uppercase; font-size: 25px; font-weight:400;">
+                                                    Kelembapan
+                                                </div>
+                                                <div  style="text-align: center;">
+                                                    <p class="card-text" id="kelembapan" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax]?data_all.data.weather[index].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax]?data_all.data.weather[index].parameter[1].value[check_minmax]:"-"} ( % )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; text-align:center; font-size: 25px; text-transform:uppercase; font-weight:400;">
+                                                    Arah Angin
+                                                </div>
+                                                <div  style=" margin-left:20px; margin-right font-size:20px; font-weight: 400;">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Pagi
+                                                        </div>
+                                                        <div class="col" id="arah1">
+                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[0]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Siang
+                                                        </div>
+                                                        <div class="col" id="arah2">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[1]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Malam
+                                                        </div>
+                                                        <div class="col" id="arah3">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[2]])}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="width: 384px; height:150px; margin: 0 auto;background-color: #2d378f;">
+                                            <div style="margin-top: 10px;">
+                                                <div style=" color: yellow ;width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Kecepatan Angin
+                                                </div>
+                                                <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Pagi
+                                                            </div>
+                                                            <div class="col" id="kecepatan1">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan1">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Siang
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Malam
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+         `
+            slider.appendChild(temp_div)
+            if (data_tomorrow == true) {
+                var temp_div2 = document.createElement("div")
+                temp_div2.innerHTML = `
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div>
+                        <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
+                            <div class=" "
+                            style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-ESOK HARI
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px; ">
+                                    <section class="card-area">
+                                        <!-- Card: 1 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size: 30px;">Pagi</p>
+                                                               
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[0]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                      
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[0])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 2 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px ;">Siang</p>
+                                                              
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[1]}am.png"
+                                                                    style="width:100px;" alt="...">
+                                                         
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[1])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Card: 3 -->
+                                        <section class="card-section">
+                                            <div class="card">
+                                                <div class="flip-card">
+                                                    <div class="flip-card__">
+                                                        <div class="card-front">
+                                                            <div class="card-front__tp card-front__tp--camping"
+                                                                style="text-transform: uppercase;">
+                                                                <p style="font-size:30px;">Malam</p>
+                                                      
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[2]}pm.png"
+                                                                    style="width:100px;" alt="...">
+                                                           
+                                                            <p class="card-front__text-price">
+                                                            ${kode_cuaca(check_index_weather_tomorrow[2])}
+                                                        </p>
+                                                            </div>
+
+                                                            <div class="card-front__bt">
+                                                                <p
+                                                                    class="card-front__text-view card-front__text-view--camping">
+                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]:"-"} ( °C )
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                    </section>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item ">
+                    <div id="data2">
+                        <div class="text-color"
+                            style="background-color:transparent;  height: 500px; width: auto; ">
+                            <div class=" "
+                                style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
+                                <div class="title_jadwaldata1" style="width:800px">
+                                    <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
+                                    ${data_all.data.weather[index].city}-ESOK HARI
+                                    </div>
+                                </div>
+                                <div class="row " style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Suhu Udara
+                                                </div>
+                                                <div style="text-align: center;">
+                                                    <p class="card-text" id="suhu" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]:"-"} ( °C )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color:#2d378f  ;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; text-align:center; text-transform:uppercase; font-size: 25px; font-weight:400;">
+                                                    Kelembapan
+                                                </div>
+                                                <div  style="text-align: center;">
+                                                    <p class="card-text" id="kelembapan" style="font-size: 30px; font-weight:400;">
+                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:15px">
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="background-color: #2d378f;width: 384px; height:150px; margin: 0 auto;">
+                                            <div style="margin-top: 10px;">
+                                                <div style=" color: yellow ;width: auto; height: 50px; text-align:center; font-size: 25px; text-transform:uppercase; font-weight:400;">
+                                                    Arah Angin
+                                                </div>
+                                                <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Pagi
+                                                        </div>
+                                                        <div class="col" id="arah1">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[0]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Siang
+                                                        </div>
+                                                        <div class="col" id="arah2">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[1]])}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            Malam
+                                                        </div>
+                                                        <div class="col" id="arah3">
+                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[2]])}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ">
+                                        <div class="card"
+                                            style="width: 384px; height:150px; margin: 0 auto;background-color: #2d378f;">
+                                            <div style="margin-top: 10px;">
+                                                <div style="color: yellow ; width: auto; height: 50px; font-size: 25px; text-align:center; text-transform:uppercase; font-weight:400;">
+                                                    Kecepatan Angin
+                                                </div>
+                                                <div  style="text-align: center; font-size:18px; font-weight: 400;">
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Pagi
+                                                            </div>
+                                                            <div class="col" id="kecepatan1" >
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan1">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Siang
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan2">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                Malam
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
+                                                            </div>
+                                                            <div class="col" id="kecepatan3">
+                                                                Km/jam
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+                slider.appendChild(temp_div2)
+
+            }
+        }
+
+    } else {
+        list_data = false
+
+
+    }
+
+}
+// console.log(data_all.data.earthquake)
+if (list_data == false) {
+    var div_last_page = document.createElement("div")
+    div_last_page.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
+    <div>
+        <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
+            <div class=" "
+                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px;  width: auto; margin: 10px; border-radius: 50px; ">
+        
+                    <div class="d-flex justify-content-center align-items-center"
+                        style="text-align: center; height:400px;   font-size: 40px;">
+                        Data belum terupdate
+                    </div>
+    
+            </div>
+        </div>
+    </div>`
+    slider.appendChild(div_last_page)
+}
+if (data_all.data.earthquake.Jam) {
+
+    if (logger == true) {
+        // for (let index = 0; index < data_all.data.earthquake.length; index++) {
+        var page_earthquake = document.createElement("div")
+        page_earthquake.innerHTML = `<div class="carousel-item ">
+        <div style="  height: 500px; width: auto; ">
+            <div class=" "
+                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+    
+                <div class="row ">
+                    <div  style="text-align: center; color:yellow; font-size: 30px;">
+                        GEMPA BUMI TERKINI
+                    </div>
+                    <div class="col" style="margin-left: 20px;">
+                        <img src="./sidefiles/gempa.jpg" alt="...."
+                            style="width: 400px; height: 350px; align-content: center; border-radius: 5px;">
+                    </div>
+                    <div class="col" style="margin-right: 60px;">
+                        <div class="card" style="font-size:18px;width: 300px; height: auto; border-color: transparent;">
+                            <div>
+                                <div class="text-color"
+                                    style="background-color: #202977; width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+    
+                                    <div style="margin-left:10px">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Tanggal
+                                            </div>:
+                                            <div class="col" id="tanggal_gempa">
+                                               ${data_all.data.earthquake.Tanggal}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Jam
+                                            </div>:
+                                            <div class="col" id="jam_gempa">
+                                            ${data_all.data.earthquake.Jam}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Magnitudo
+                                            </div>:
+                                            <div class="col" id="magnitudo_gempa">
+                                            ${data_all.data.earthquake.Magnitude}
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Kedalaman
+                                            </div>:
+                                            <div class="col" id="kedalaman_gempa">
+                                            ${data_all.data.earthquake.Kedalaman}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Lokasi
+                                            </div>:
+                                            <div class="col" id="lokasi_gempa">
+                                            ${data_all.data.earthquake.Lintang} - ${data_all.data.earthquake.Bujur}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Wilayah
+                                            </div>:
+                                            <div class="col" id="wilayah_gempa">
+                                            ${data_all.data.earthquake.Wilayah}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Dirasakan
+                                            </div>:
+                                            <div class="col" id="dirasakan_gempa">
+                                            ${data_all.data.earthquake.Dirasakan}
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                    <div style="text-align: center;">
+                                        GEMPA INI DIRASAKAN UNTUK DITERUSKAN PADA MASYARAKAT
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+        slider.appendChild(page_earthquake)
+
+    } else if (logger_weather == true) {
+        var page_earthquake = document.createElement("div")
+        page_earthquake.innerHTML = `<div class="carousel-item ">
+        <div style="  height: 500px; width: auto; ">
+            <div class=" "
+                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+    
+                <div class="row ">
+                    <div  style="text-align: center; color:yellow; font-size: 30px;">
+                        GEMPA BUMI TERKINI
+                    </div>
+                    <div class="col" style="margin-left: 20px;">
+                        <img src="./sidefiles/gempa.jpg" alt="...."
+                            style="width: 400px; height: 350px; align-content: center; border-radius: 5px;">
+                    </div>
+                    <div class="col" style="margin-right: 60px;">
+                        <div class="card" style="font-size:18px;width: 300px; height: auto; border-color: transparent;">
+                            <div>
+                                <div class="text-color"
+                                    style="background-color: #202977; width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+    
+                                    <div style="margin-left:10px">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Tanggal
+                                            </div>:
+                                            <div class="col" id="tanggal_gempa">
+                                               ${data_all.data.earthquake.Tanggal}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Jam
+                                            </div>:
+                                            <div class="col" id="jam_gempa">
+                                            ${data_all.data.earthquake.Jam}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Magnitudo
+                                            </div>:
+                                            <div class="col" id="magnitudo_gempa">
+                                            ${data_all.data.earthquake.Magnitude}
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Kedalaman
+                                            </div>:
+                                            <div class="col" id="kedalaman_gempa">
+                                            ${data_all.data.earthquake.Kedalaman}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Lokasi
+                                            </div>:
+                                            <div class="col" id="lokasi_gempa">
+                                            ${data_all.data.earthquake.Lintang} - ${data_all.data.earthquake.Bujur}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Wilayah
+                                            </div>:
+                                            <div class="col" id="wilayah_gempa">
+                                            ${data_all.data.earthquake.Wilayah}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Dirasakan
+                                            </div>:
+                                            <div class="col" id="dirasakan_gempa">
+                                            ${data_all.data.earthquake.Dirasakan}
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                    <div style="text-align: center;">
+                                        GEMPA INI DIRASAKAN UNTUK DITERUSKAN PADA MASYARAKAT
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+        slider.appendChild(page_earthquake)
+    } else {
+        var page_earthquake = document.createElement("div")
+        page_earthquake.innerHTML = `<div class="carousel-item active">
+        <div style="  height: 500px; width: auto; ">
+            <div class=" "
+                style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
+    
+                <div class="row ">
+                    <div  style="text-align: center; color:yellow; font-size: 30px;">
+                        GEMPA BUMI TERKINI
+                    </div>
+                    <div class="col" style="margin-left: 20px;">
+                        <img src="./sidefiles/gempa.jpg" alt="...."
+                            style="width: 400px; height: 350px; align-content: center; border-radius: 5px;">
+                    </div>
+                    <div class="col" style="margin-right: 60px;">
+                        <div class="card" style="font-size:18px;width: 300px; height: auto; border-color: transparent;">
+                            <div>
+                                <div class="text-color"
+                                    style="background-color: #202977; width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+    
+                                    <div style="margin-left:10px">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Tanggal
+                                            </div>:
+                                            <div class="col" id="tanggal_gempa">
+                                               ${data_all.data.earthquake.Tanggal}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Jam
+                                            </div>:
+                                            <div class="col" id="jam_gempa">
+                                            ${data_all.data.earthquake.Jam}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Magnitudo
+                                            </div>:
+                                            <div class="col" id="magnitudo_gempa">
+                                            ${data_all.data.earthquake.Magnitude}
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Kedalaman
+                                            </div>:
+                                            <div class="col" id="kedalaman_gempa">
+                                            ${data_all.data.earthquake.Kedalaman}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Lokasi
+                                            </div>:
+                                            <div class="col" id="lokasi_gempa">
+                                            ${data_all.data.earthquake.Lintang} - ${data_all.data.earthquake.Bujur}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Wilayah
+                                            </div>:
+                                            <div class="col" id="wilayah_gempa">
+                                            ${data_all.data.earthquake.Wilayah}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Dirasakan
+                                            </div>:
+                                            <div class="col" id="dirasakan_gempa">
+                                            ${data_all.data.earthquake.Dirasakan}
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                    <div style="text-align: center;">
+                                        GEMPA INI DIRASAKAN UNTUK DITERUSKAN PADA MASYARAKAT
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+        slider.appendChild(page_earthquake)
+    }
+
+}
