@@ -1,4 +1,9 @@
 const d = new Date();
+var earthquake_datetime
+try {
+    const earthquake = new Date(data_all.data.earthquake.DateTime);
+     earthquake_datetime = `${earthquake.getDate()}-${earthquake.getMonth()+1}-${earthquake.getFullYear()}`
+} catch {}
 var tanggal_temp
 var slider = document.getElementById("start_slider")
 //mengkosongkan innerhtml
@@ -13,14 +18,11 @@ function showTime() {
     let hour = time.getHours();
     let min = time.getMinutes();
     let sec = time.getSeconds();
-    
     hour = hour < 10 ? "0" + hour : hour;
     min = min < 10 ? "0" + min : min;
     sec = sec < 10 ? "0" + sec : sec;
-
     let currentTime = hour + ":" +
         min + ":" + sec;
-
     document.getElementById("jam_digital")
         .innerHTML = currentTime;
 }
@@ -55,8 +57,8 @@ function kode_cuaca(kode_cuaca2) {
         return 'Hujan Petir'
     } else if (kode_cuaca2 == 97) {
         return 'Hujan Petir'
-    }else{
-        return'-'
+    } else {
+        return '-'
     }
 }
 //derajat ke kompas
@@ -84,37 +86,36 @@ function rotateCompas(x) {
     }
 }
 
-
 // CHECK IF IMAGE EXISTS
 function checkIfImageExists(url, callback) {
     const img = new Image();
     img.src = url;
-    
+
     if (img.complete) {
-      callback(true);
-    } else {
-      img.onload = () => {
         callback(true);
-      };
-      
-      img.onerror = () => {
-        callback(false);
-      };
+    } else {
+        img.onload = () => {
+            callback(true);
+        };
+
+        img.onerror = () => {
+            callback(false);
+        };
     }
-  }
-var check_bg="./sidefiles/background.jpg"
+}
+var check_bg = "./sidefiles/background.jpg"
 checkIfImageExists(check_bg)
-  
-  // USAGE
-  checkIfImageExists('./sidefiles/background.jpg', (exists) => {
+
+// USAGE
+checkIfImageExists('./sidefiles/background.jpg', (exists) => {
     if (exists) {
-        document.getElementById('background').style.backgroundImage=`url('${check_bg}')`
+        document.getElementById('background').style.backgroundImage = `url('${check_bg}')`
 
     } else {
-        document.getElementById('background').style.backgroundImage="linear-gradient(#06085a,#2440bb)"  ;
+        document.getElementById('background').style.backgroundImage = "linear-gradient(#06085a,#2440bb)";
 
     }
-  });
+});
 var logger = false;
 var logger_earthquake = false;
 var list_data, temp_active = true;
@@ -128,7 +129,6 @@ function ms(i) {
 }
 // tanggal hari ini
 document.getElementById("tanggal").innerHTML = `${day}, ${d.getDate()} ${month} ${d.getFullYear()}`
-// console.log(data_all.data.weather[0].city)
 var check_day, check_minmax, check_minmax_tomorrow, data_tomorrow
 var check_index_weather = [],
     check_index_weather_tomorrow = [],
@@ -138,7 +138,6 @@ var check_index_weather = [],
     wind_speed_tomorrow = [],
     wind_direction_today = [],
     wind_direction_tomorrow = []
-// console.log(data_all.data.logger)
 //tampilan data logger
 try {
     if (data_all.data.logger.datetime) {
@@ -161,7 +160,7 @@ try {
                             style="width: 250px; z-index:300; position:relative; height: 250px; align-content: center; border-radius: 5px;">
                     </div>
                     <div class="col" style="margin-right: 110px; margin-top: 20px; ">
-                        <div class="card" style="font-size:20px;width: 300px; height: 200px; border-color: transparent;">
+                        <div  style="font-size:20px;width: 300px; height: 200px; border-color: transparent;">
                             <div>
                                 <div class="text-color"
                                     style=" width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
@@ -221,7 +220,7 @@ try {
 } catch {}
 //tampilan gempa
 try {
-    if (data_all.data.earthquake.Jam && data_all.data.earthquake.DateTime.slice(0, 10) === `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`) {
+    if (data_all.data.earthquake.Jam && earthquake_datetime === `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`) {
         if (logger == true) {
             // for (let index = 0; index < data_all.data.earthquake.length; index++) {
             var page_earthquake = document.createElement("div")
@@ -418,9 +417,10 @@ try {
 } catch {}
 
 // pengulangan sejumlah kota 
-for (let index = 0; index < data_all.data.weather.length; index++) {
-    try {
-        check_index_weather = []
+try {
+    for (let index = 0; index < data_all.data.weather.length; index++) {
+        try {
+            check_index_weather = []
             check_index_weather_tomorrow = []
             temperature_today = []
             temperature_tomorrow = []
@@ -428,130 +428,126 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
             wind_speed_tomorrow = []
             wind_direction_today = []
             wind_direction_tomorrow = []
-        //mengecek temperature
-        for (let x = 0; x < data_all.data.weather[index].parameter[5].datetime.length; x++) {
-            if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                temperature_today[0] = x
-            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                temperature_today[1] = x
+            //mengecek temperature
+            for (let x = 0; x < data_all.data.weather[index].parameter[5].datetime.length; x++) {
+                if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                    temperature_today[0] = x
+                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                    temperature_today[1] = x
 
-            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                temperature_today[2] = x
+                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                    temperature_today[2] = x
 
-            }
+                }
 
-            if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                temperature_tomorrow[0] = x
-            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                temperature_tomorrow[1] = x
+                if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                    temperature_tomorrow[0] = x
+                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                    temperature_tomorrow[1] = x
 
-            } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                temperature_tomorrow[2] = x
+                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                    temperature_tomorrow[2] = x
 
-            }
-
-        }
-        //mengecek weather
-        for (let x = 0; x < data_all.data.weather[index].parameter[6].datetime.length; x++) {
-            if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                check_index_weather[0] = data_all.data.weather[index].parameter[6].value[x]
-            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                check_index_weather[1] = data_all.data.weather[index].parameter[6].value[x]
-
-            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                check_index_weather[2] = data_all.data.weather[index].parameter[6].value[x]
+                }
 
             }
+            //mengecek weather
+            for (let x = 0; x < data_all.data.weather[index].parameter[6].datetime.length; x++) {
+                if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                    check_index_weather[0] = data_all.data.weather[index].parameter[6].value[x]
+                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                    check_index_weather[1] = data_all.data.weather[index].parameter[6].value[x]
 
-            if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                check_index_weather_tomorrow[0] = data_all.data.weather[index].parameter[6].value[x]
-            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                check_index_weather_tomorrow[1] = data_all.data.weather[index].parameter[6].value[x]
+                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                    check_index_weather[2] = data_all.data.weather[index].parameter[6].value[x]
 
-            } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                check_index_weather_tomorrow[2] = data_all.data.weather[index].parameter[6].value[x]
+                }
 
+                if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                    check_index_weather_tomorrow[0] = data_all.data.weather[index].parameter[6].value[x]
+                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                    check_index_weather_tomorrow[1] = data_all.data.weather[index].parameter[6].value[x]
+
+                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                    check_index_weather_tomorrow[2] = data_all.data.weather[index].parameter[6].value[x]
+
+                }
             }
-        }
-        // console.log(check_index_weather)
-        //mengecek wind direction
-        for (let x = 0; x < data_all.data.weather[index].parameter[7].datetime.length; x++) {
-            if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                wind_direction_today[0] = x
-            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                wind_direction_today[1] = x
+            //mengecek wind direction
+            for (let x = 0; x < data_all.data.weather[index].parameter[7].datetime.length; x++) {
+                if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                    wind_direction_today[0] = x
+                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                    wind_direction_today[1] = x
 
-            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                wind_direction_today[2] = x
+                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                    wind_direction_today[2] = x
 
+                }
+
+                if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                    wind_direction_tomorrow[0] = x
+                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                    wind_direction_tomorrow[1] = x
+
+                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                    wind_direction_tomorrow[2] = x
+
+                }
+            }
+            //mengecek wind speed
+            for (let x = 0; x < data_all.data.weather[index].parameter[8].datetime.length; x++) {
+                if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
+                    wind_speed_today[0] = x
+                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
+                    wind_speed_today[1] = x
+
+                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
+                    wind_speed_today[2] = x
+
+                }
+
+                if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
+                    wind_speed_tomorrow[0] = x
+                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
+                    wind_speed_tomorrow[1] = x
+
+                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
+                    wind_speed_tomorrow[2] = x
+
+                }
             }
 
-            if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                wind_direction_tomorrow[0] = x
-            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                wind_direction_tomorrow[1] = x
+            // pengecekan data tanggal untuk tampil
+            if (data_all.data.weather[index].parameter[6].datetime[1].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
 
-            } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                wind_direction_tomorrow[2] = x
-
+                check_day = 1
+                // check_index_weather = [1, 2, 3]
+                // check_index_weather_tomorrow = [5, 6, 7]
+                check_minmax_tomorrow = 1
+                check_minmax = 0
+                data_tomorrow = true
+            } else if (data_all.data.weather[index].parameter[6].datetime[5].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
+                check_day = 5
+                // check_index_weather = [5, 6, 7]
+                // check_index_weather_tomorrow = [9, 10, 11]
+                check_minmax = 1
+                check_minmax_tomorrow = 2
+                data_tomorrow = true
+            } else if (data_all.data.weather[index].parameter[6].datetime[9].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
+                check_day = 9
+                // check_index_weather = [9, 10, 11]
+                check_minmax = 2
+                data_tomorrow = false
             }
-        }
-        // console.log(wind_direction_tomorrow)
-        //mengecek wind speed
-        for (let x = 0; x < data_all.data.weather[index].parameter[8].datetime.length; x++) {
-            if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                wind_speed_today[0] = x
-            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                wind_speed_today[1] = x
-
-            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                wind_speed_today[2] = x
-
-            }
-
-            if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                wind_speed_tomorrow[0] = x
-            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                wind_speed_tomorrow[1] = x
-
-            } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                wind_speed_tomorrow[2] = x
-
-            }
-        }
-
-        // pengecekan data tanggal untuk tampil
-        if (data_all.data.weather[index].parameter[6].datetime[1].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-
-            check_day = 1
-            // check_index_weather = [1, 2, 3]
-            // check_index_weather_tomorrow = [5, 6, 7]
-            check_minmax_tomorrow = 1
-            check_minmax = 0
-            data_tomorrow = true
-        } else if (data_all.data.weather[index].parameter[6].datetime[5].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-            check_day = 5
-            // check_index_weather = [5, 6, 7]
-            // check_index_weather_tomorrow = [9, 10, 11]
-            check_minmax = 1
-            check_minmax_tomorrow = 2
-            data_tomorrow = true
-        } else if (data_all.data.weather[index].parameter[6].datetime[9].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-            check_day = 9
-            // check_index_weather = [9, 10, 11]
-            check_minmax = 2
-            data_tomorrow = false
-        }
-    } catch {}
-    // console.log(logger, logger_earthquake)
-    //penyocokan data yang ditampilkan untuk data hari ini
-    if (check_day) {
-        list_data = true
-        if (index == 0 && logger == false && logger_earthquake == false) {
-            // logger_weather = true
-            temp_active = false
-            var temp_div = document.createElement("div")
-            temp_div.innerHTML = `  
+        } catch {}
+        //penyocokan data yang ditampilkan untuk data hari ini
+        if (check_day) {
+            list_data = true
+            if (index == 0 && logger == false && logger_earthquake == false) {
+                temp_active = false
+                var temp_div = document.createElement("div")
+                temp_div.innerHTML = `  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -799,11 +795,11 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
                 </div>
 
         `
-            slider.appendChild(temp_div)
-            if (data_tomorrow == true) {
+                slider.appendChild(temp_div)
+                if (data_tomorrow == true) {
 
-                var temp_div2 = document.createElement("div")
-                temp_div2.innerHTML = `
+                    var temp_div2 = document.createElement("div")
+                    temp_div2.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1048,14 +1044,13 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
                         </div>
                     </div>
                 </div>`
-                slider.appendChild(temp_div2)
+                    slider.appendChild(temp_div2)
 
-            }
-        } else if (temp_active == true && logger == false && logger_earthquake == false) {
-            // logger_weather = true
-            temp_active = false
-            var temp_div = document.createElement("div")
-            temp_div.innerHTML = `  
+                }
+            } else if (temp_active == true && logger == false && logger_earthquake == false) {
+                temp_active = false
+                var temp_div = document.createElement("div")
+                temp_div.innerHTML = `  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1303,11 +1298,11 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
                 </div>
 
         `
-            slider.appendChild(temp_div)
-            if (data_tomorrow == true) {
+                slider.appendChild(temp_div)
+                if (data_tomorrow == true) {
 
-                var temp_div2 = document.createElement("div")
-                temp_div2.innerHTML = `
+                    var temp_div2 = document.createElement("div")
+                    temp_div2.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1552,16 +1547,12 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
                         </div>
                     </div>
                 </div>`
-                slider.appendChild(temp_div2)
+                    slider.appendChild(temp_div2)
 
-            }
-        } else {
-            // logger_weather = false
-
-            // console.log(data_all.data.weather[index].parameter[5])
-            // console.log(convert.toCompass(data_all.data.weather[index].parameter[7].value[1]));
-            var temp_div = document.createElement("div")
-            temp_div.innerHTML = `  
+                }
+            } else {
+                var temp_div = document.createElement("div")
+                temp_div.innerHTML = `  
             <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1810,10 +1801,10 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
 
                
          `
-            slider.appendChild(temp_div)
-            if (data_tomorrow == true) {
-                var temp_div2 = document.createElement("div")
-                temp_div2.innerHTML = `
+                slider.appendChild(temp_div)
+                if (data_tomorrow == true) {
+                    var temp_div2 = document.createElement("div")
+                    temp_div2.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -2058,19 +2049,19 @@ for (let index = 0; index < data_all.data.weather.length; index++) {
                         </div>
                     </div>
                 </div>`
-                slider.appendChild(temp_div2)
+                    slider.appendChild(temp_div2)
 
+                }
             }
+
+        } else {
+            list_data = false
         }
 
-    } else {
-        list_data = false
-
-
     }
-
+} catch {
+    list_data = false
 }
-// console.log(data_all.data.earthquake)
 //data belum terupdate
 if (list_data == false) {
     if (logger == false && logger_earthquake == false) {
@@ -2102,11 +2093,9 @@ if (list_data == false) {
                         style="text-align: center; height:400px;   font-size: 40px;">
                         Data belum terupdate
                     </div>
-    
             </div>
         </div>
     </div>`
         slider.appendChild(div_last_page)
     }
-
 }
