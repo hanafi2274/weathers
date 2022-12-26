@@ -7,11 +7,15 @@ const axios = require('axios');
 
 exports.index = async (req, res) => {
     try{
-        let tgl = req.params.tgl;
+        let tgl = req.query.tgl;
+        if (!tgl) {
+            tgl = moment().format('DD-MM-YYYY')
+        }
         let validate_date = moment(tgl, 'DD-MM-YYYY',true).isValid();
         if (!validate_date) {
             return res.status(401).json({ message:'failed',data: 'date format invalid' });
         }
+        
         let bmkg_earthquake2 = await axios({method: 'get',url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',headers: { }});
         let result = await axios({method: 'get',url: `http://202.90.198.212/logger/log-${tgl}.txt`,headers: { }});
         let bmkg_weather = await axios({method: 'get',url: `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`,headers: { }});
