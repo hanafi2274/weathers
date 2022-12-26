@@ -1,151 +1,4 @@
-const d = new Date();
-var earthquake_datetime
-try {
-    const earthquake = new Date(data_all.data.earthquake.DateTime);
-     earthquake_datetime = `${earthquake.getDate()}-${earthquake.getMonth()+1}-${earthquake.getFullYear()}`
-} catch {}
-var tanggal_temp
-var slider = document.getElementById("start_slider")
-//mengkosongkan innerhtml
-slider.innerHTML = ""
-const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-// set jam 
-setInterval(showTime, 1000);
-
-function showTime() {
-    let time = new Date();
-    let hour = time.getHours();
-    let min = time.getMinutes();
-    let sec = time.getSeconds();
-    hour = hour < 10 ? "0" + hour : hour;
-    min = min < 10 ? "0" + min : min;
-    sec = sec < 10 ? "0" + sec : sec;
-    let currentTime = hour + ":" +
-        min + ":" + sec;
-    document.getElementById("jam_digital")
-        .innerHTML = currentTime;
-}
-
-showTime();
-// KODE CUACA 
-
-function kode_cuaca(kode_cuaca2) {
-    if (kode_cuaca2 == 0) {
-        return 'Cerah'
-    } else if (kode_cuaca2 == 1) {
-        return 'Cerah Berawan'
-    } else if (kode_cuaca2 == 2) {
-        return 'Cerah Berawan'
-    } else if (kode_cuaca2 == 3) {
-        return 'Berawan'
-    } else if (kode_cuaca2 == 4) {
-        return 'Berawan Tebal'
-    } else if (kode_cuaca2 == 5) {
-        return 'Udara Kabur'
-    } else if (kode_cuaca2 == 10) {
-        return 'Asap'
-    } else if (kode_cuaca2 == 45) {
-        return 'Kabut'
-    } else if (kode_cuaca2 == 60) {
-        return 'Hujan Ringan'
-    } else if (kode_cuaca2 == 61) {
-        return 'Hujan Lebat'
-    } else if (kode_cuaca2 == 80) {
-        return 'Hujan Lokal'
-    } else if (kode_cuaca2 == 95) {
-        return 'Hujan Petir'
-    } else if (kode_cuaca2 == 97) {
-        return 'Hujan Petir'
-    } else {
-        return '-'
-    }
-}
-//derajat ke kompas
-var convert = {
-    toCompass: function (degrees) {
-        if (degrees) {
-            return ['Utara', 'Utara-Timur Laut', 'Timur Laut', 'Timur-Timur Laut', 'Timur', 'Timur-Tenggara', 'Tenggara', 'Selatan-Tenggara', 'Selatan', 'Selatan-Barat Daya',
-                'Barat Daya', 'Barat-Barat Daya', 'Barat', 'Barat-Barat Laut', 'Barat Laut', 'Utara-Barat Laut', 'Utara'
-            ][Math.round(degrees / 11.25 / 2)];
-
-        } else {
-            return "-"
-        }
-    }
-}
-//logegr panah kompas
-function rotateCompas(x) {
-    if (x) {
-        return [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5,
-            225, 247.5, 270, 292.5, 315, 337.5, 360
-        ][Math.round(x / 11.25 / 2)];
-
-    } else {
-        return "-"
-    }
-}
-
-// CHECK IF IMAGE EXISTS
-function checkIfImageExists(url, callback) {
-    const img = new Image();
-    img.src = url;
-
-    if (img.complete) {
-        callback(true);
-    } else {
-        img.onload = () => {
-            callback(true);
-        };
-
-        img.onerror = () => {
-            callback(false);
-        };
-    }
-}
-var check_bg = "./sidefiles/background.jpg"
-checkIfImageExists(check_bg)
-
-// USAGE
-checkIfImageExists('./sidefiles/background.jpg', (exists) => {
-    if (exists) {
-        document.getElementById('background').style.backgroundImage = `url('${check_bg}')`
-
-    } else {
-        document.getElementById('background').style.backgroundImage = "linear-gradient(#06085a,#2440bb)";
-
-    }
-});
-var logger = false;
-var logger_earthquake = false;
-var list_data, temp_active = true;
-var arah_angin;
-let day = days[d.getDay()];
-let month = months[d.getMonth()]
-// kecepatan angin logger m/s ke km/jam
-function ms(i) {
-    kmh = (i * 36).toFixed(1);
-    return kmh.toString();
-}
-// tanggal hari ini
-document.getElementById("tanggal").innerHTML = `${day}, ${d.getDate()} ${month} ${d.getFullYear()}`
-var check_day, check_minmax, check_minmax_tomorrow, data_tomorrow
-var check_index_weather = [],
-    check_index_weather_tomorrow = [],
-    temperature_today = [],
-    temperature_tomorrow = [],
-    wind_speed_today = [],
-    wind_speed_tomorrow = [],
-    wind_direction_today = [],
-    wind_direction_tomorrow = []
-//tampilan data logger
-try {
-    if (data_all.data.logger.datetime) {
-        if (data_all.data.logger.datetime.slice(0, 8) == `${d.getDate()}${d.getMonth()+1}${d.getFullYear()}`) {
-            list_data = true
-            logger = true
-            var temp_page1 = document.createElement("div")
-            temp_page1.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
+const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquake_datetime=`${a.getDate()}-${a.getMonth()+1}-${a.getFullYear()}`}catch{}var arah_angin,check_day,check_minmax,check_minmax_tomorrow,data_tomorrow,slider=document.getElementById("start_slider");slider.innerHTML="";const days=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"],months=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];function showTime(){let a=new Date,e=a.getHours(),t=a.getMinutes(),i=a.getSeconds(),r=(e=e<10?"0"+e:e)+":"+(t=t<10?"0"+t:t)+":"+(i=i<10?"0"+i:i);document.getElementById("jam_digital").innerHTML=r}function kode_cuaca(a){if(0==a)return"Cerah";if(1==a)return"Cerah Berawan";if(2==a)return"Cerah Berawan";if(3==a)return"Berawan";if(4==a)return"Berawan Tebal";else if(5==a)return"Udara Kabur";else if(10==a)return"Asap";else if(45==a)return"Kabut";else if(60==a)return"Hujan Ringan";else if(61==a)return"Hujan Lebat";else if(80==a)return"Hujan Lokal";else if(95==a)return"Hujan Petir";else if(97==a)return"Hujan Petir";else return"-"}setInterval(showTime,1e3),showTime();var convert={toCompass:function(a){return a?["Utara","Utara-Timur Laut","Timur Laut","Timur-Timur Laut","Timur","Timur-Tenggara","Tenggara","Selatan-Tenggara","Selatan","Selatan-Barat Daya","Barat Daya","Barat-Barat Daya","Barat","Barat-Barat Laut","Barat Laut","Utara-Barat Laut","Utara"][Math.round(a/11.25/2)]:"-"}};function rotateCompas(a){return a?[0,22.5,45,67.5,90,112.5,135,157.5,180,202.5,225,247.5,270,292.5,315,337.5,360][Math.round(a/11.25/2)]:"-"}function checkIfImageExists(a,e){let t=new Image;t.src=a,t.complete?e(!0):(t.onload=()=>{e(!0)},t.onerror=()=>{e(!1)})}var check_bg="./sidefiles/background.jpg";checkIfImageExists(check_bg),checkIfImageExists("./sidefiles/background.jpg",a=>{a?document.getElementById("background").style.backgroundImage=`url('${check_bg}')`:document.getElementById("background").style.backgroundImage="linear-gradient(#06085a,#2440bb)"});var earthquake_datetime,tanggal_temp,list_data,logger=!1,logger_earthquake=!1,temp_active=!0;let day=days[d.getDay()],month=months[d.getMonth()];function ms(a){return(kmh=(36*a).toFixed(1)).toString()}document.getElementById("tanggal").innerHTML=`${day}, ${d.getDate()} ${month} ${d.getFullYear()}`;var check_index_weather=[],check_index_weather_tomorrow=[],temperature_today=[],temperature_tomorrow=[],wind_speed_today=[],wind_speed_tomorrow=[],wind_direction_today=[],wind_direction_tomorrow=[];try{if(data_all.data.logger.datetime&&data_all.data.logger.datetime.slice(0,8)==`${d.getDate()}${d.getMonth()+1}${d.getFullYear()}`){list_data=!0,logger=!0;var e=document.createElement("div");e.innerHTML=`<div class="carousel-item active" data-bs-interval="5000">
         <div style="  height: 500px; width: auto;">
             <div class=" "
                 style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -174,7 +27,7 @@ try {
                                         </div>
                                         <div class="row">
                                             <div class="col" style="color: white;">
-                                               ${data_all.data.logger['temperature']}°C
+                                               ${data_all.data.logger.temperature}\xb0C
                                             </div>
         
                                         </div>
@@ -187,7 +40,7 @@ try {
                                         </div>
                                         <div class="row">
                                             <div class="col" style="color: white;">
-                                            ${data_all.data.logger['rh']}%
+                                            ${data_all.data.logger.rh}%
                                             </div>
         
                                         </div>
@@ -203,28 +56,16 @@ try {
                 </div>
                 <div style="margin: 10px; font-size: 25px; text-transform:uppercase; ">
                     <div  style="text-align: center; color: #B1F2FF;">
-                       KECEPATAN ANGIN :  ${ms(data_all.data.logger['wind_speed'])} Km/jam
+                       KECEPATAN ANGIN :  ${ms(data_all.data.logger.wind_speed)} Km/jam
                     </div>
                     <div  style="text-align: center; color: yellow;">
-                       ARAH ANGIN : ${convert.toCompass(data_all.data.logger['wind_direction_degree'])}
+                       ARAH ANGIN : ${convert.toCompass(data_all.data.logger.wind_direction_degree)}
                     </div>
                 </div>
         
             </div>
         </div>
-        </div>`
-            slider.appendChild(temp_page1)
-            document.getElementById("base_compas").style.transform = `rotate(${rotateCompas(data_all.data.logger.wind_direction_degree)}deg)`
-        }
-    }
-} catch {}
-//tampilan gempa
-try {
-    if (data_all.data.earthquake.Jam && earthquake_datetime === `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`) {
-        if (logger == true) {
-            // for (let index = 0; index < data_all.data.earthquake.length; index++) {
-            var page_earthquake = document.createElement("div")
-            page_earthquake.innerHTML = `<div class="carousel-item ">
+        </div>`,slider.appendChild(e),document.getElementById("base_compas").style.transform=`rotate(${rotateCompas(data_all.data.logger.wind_direction_degree)}deg)`}}catch{}try{if(data_all.data.earthquake.Jam&&earthquake_datetime===`${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`){if(!0==logger){var t=document.createElement("div");t.innerHTML=`<div class="carousel-item ">
      <div style="  height: 500px; width: auto; ">
         <div class=" "
             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -314,12 +155,7 @@ try {
             </div>
         </div>
     </div>
-</div>`
-            slider.appendChild(page_earthquake)
-        } else {
-            logger_earthquake = true
-            var page_earthquake = document.createElement("div")
-            page_earthquake.innerHTML = `<div class="carousel-item active">
+</div>`,slider.appendChild(t)}else{logger_earthquake=!0;var t=document.createElement("div");t.innerHTML=`<div class="carousel-item active">
     <div style="  height: 500px; width: auto; ">
         <div class=" "
             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -409,145 +245,7 @@ try {
             </div>
         </div>
     </div>
-</div>`
-            slider.appendChild(page_earthquake)
-        }
-
-    }
-} catch {}
-
-// pengulangan sejumlah kota 
-try {
-    for (let index = 0; index < data_all.data.weather.length; index++) {
-        try {
-            check_index_weather = []
-            check_index_weather_tomorrow = []
-            temperature_today = []
-            temperature_tomorrow = []
-            wind_speed_today = []
-            wind_speed_tomorrow = []
-            wind_direction_today = []
-            wind_direction_tomorrow = []
-            //mengecek temperature
-            for (let x = 0; x < data_all.data.weather[index].parameter[5].datetime.length; x++) {
-                if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                    temperature_today[0] = x
-                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                    temperature_today[1] = x
-
-                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                    temperature_today[2] = x
-
-                }
-
-                if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                    temperature_tomorrow[0] = x
-                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                    temperature_tomorrow[1] = x
-
-                } else if (data_all.data.weather[index].parameter[5].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                    temperature_tomorrow[2] = x
-
-                }
-
-            }
-            //mengecek weather
-            for (let x = 0; x < data_all.data.weather[index].parameter[6].datetime.length; x++) {
-                if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                    check_index_weather[0] = data_all.data.weather[index].parameter[6].value[x]
-                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                    check_index_weather[1] = data_all.data.weather[index].parameter[6].value[x]
-
-                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                    check_index_weather[2] = data_all.data.weather[index].parameter[6].value[x]
-
-                }
-
-                if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                    check_index_weather_tomorrow[0] = data_all.data.weather[index].parameter[6].value[x]
-                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                    check_index_weather_tomorrow[1] = data_all.data.weather[index].parameter[6].value[x]
-
-                } else if (data_all.data.weather[index].parameter[6].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                    check_index_weather_tomorrow[2] = data_all.data.weather[index].parameter[6].value[x]
-
-                }
-            }
-            //mengecek wind direction
-            for (let x = 0; x < data_all.data.weather[index].parameter[7].datetime.length; x++) {
-                if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                    wind_direction_today[0] = x
-                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                    wind_direction_today[1] = x
-
-                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                    wind_direction_today[2] = x
-
-                }
-
-                if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                    wind_direction_tomorrow[0] = x
-                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                    wind_direction_tomorrow[1] = x
-
-                } else if (data_all.data.weather[index].parameter[7].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                    wind_direction_tomorrow[2] = x
-
-                }
-            }
-            //mengecek wind speed
-            for (let x = 0; x < data_all.data.weather[index].parameter[8].datetime.length; x++) {
-                if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`) {
-                    wind_speed_today[0] = x
-                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`) {
-                    wind_speed_today[1] = x
-
-                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`) {
-                    wind_speed_today[2] = x
-
-                }
-
-                if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`) {
-                    wind_speed_tomorrow[0] = x
-                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`) {
-                    wind_speed_tomorrow[1] = x
-
-                } else if (data_all.data.weather[index].parameter[8].datetime[x] === `${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`) {
-                    wind_speed_tomorrow[2] = x
-
-                }
-            }
-
-            // pengecekan data tanggal untuk tampil
-            if (data_all.data.weather[index].parameter[6].datetime[1].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-
-                check_day = 1
-                // check_index_weather = [1, 2, 3]
-                // check_index_weather_tomorrow = [5, 6, 7]
-                check_minmax_tomorrow = 1
-                check_minmax = 0
-                data_tomorrow = true
-            } else if (data_all.data.weather[index].parameter[6].datetime[5].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-                check_day = 5
-                // check_index_weather = [5, 6, 7]
-                // check_index_weather_tomorrow = [9, 10, 11]
-                check_minmax = 1
-                check_minmax_tomorrow = 2
-                data_tomorrow = true
-            } else if (data_all.data.weather[index].parameter[6].datetime[9].slice(0, 8) == `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`) {
-                check_day = 9
-                // check_index_weather = [9, 10, 11]
-                check_minmax = 2
-                data_tomorrow = false
-            }
-        } catch {}
-        //penyocokan data yang ditampilkan untuk data hari ini
-        if (check_day) {
-            list_data = true
-            if (index == 0 && logger == false && logger_earthquake == false) {
-                temp_active = false
-                var temp_div = document.createElement("div")
-                temp_div.innerHTML = `  
+</div>`,slider.appendChild(t)}}}catch{}try{for(let i=0;i<data_all.data.weather.length;i++){try{check_index_weather=[],check_index_weather_tomorrow=[],temperature_today=[],temperature_tomorrow=[],wind_speed_today=[],wind_speed_tomorrow=[],wind_direction_today=[],wind_direction_tomorrow=[];for(let r=0;r<data_all.data.weather[i].parameter[5].datetime.length;r++)data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?temperature_today[0]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?temperature_today[1]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(temperature_today[2]=r),data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?temperature_tomorrow[0]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?temperature_tomorrow[1]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(temperature_tomorrow[2]=r);for(let s=0;s<data_all.data.weather[i].parameter[6].datetime.length;s++)data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?check_index_weather[0]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?check_index_weather[1]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(check_index_weather[2]=data_all.data.weather[i].parameter[6].value[s]),data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?check_index_weather_tomorrow[0]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?check_index_weather_tomorrow[1]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(check_index_weather_tomorrow[2]=data_all.data.weather[i].parameter[6].value[s]);for(let c=0;c<data_all.data.weather[i].parameter[7].datetime.length;c++)data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?wind_direction_today[0]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?wind_direction_today[1]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(wind_direction_today[2]=c),data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?wind_direction_tomorrow[0]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?wind_direction_tomorrow[1]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(wind_direction_tomorrow[2]=c);for(let l=0;l<data_all.data.weather[i].parameter[8].datetime.length;l++)data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?wind_speed_today[0]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?wind_speed_today[1]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(wind_speed_today[2]=l),data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?wind_speed_tomorrow[0]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?wind_speed_tomorrow[1]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(wind_speed_tomorrow[2]=l);data_all.data.weather[i].parameter[6].datetime[1].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`?(check_day=1,check_minmax_tomorrow=1,check_minmax=0,data_tomorrow=!0):data_all.data.weather[i].parameter[6].datetime[5].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`?(check_day=5,check_minmax=1,check_minmax_tomorrow=2,data_tomorrow=!0):data_all.data.weather[i].parameter[6].datetime[9].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`&&(check_day=9,check_minmax=2,data_tomorrow=!1)}catch{}if(check_day){if(list_data=!0,0==i&&!1==logger&&!1==logger_earthquake){temp_active=!1;var o=document.createElement("div");if(o.innerHTML=`  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -555,7 +253,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -581,7 +279,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[0]]?data_all.data.weather[index].parameter[5].value[temperature_today[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[0]]?data_all.data.weather[i].parameter[5].value[temperature_today[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -612,7 +310,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[1]]?data_all.data.weather[index].parameter[5].value[temperature_today[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[1]]?data_all.data.weather[i].parameter[5].value[temperature_today[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -644,7 +342,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[2]]?data_all.data.weather[index].parameter[5].value[temperature_today[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[2]]?data_all.data.weather[i].parameter[5].value[temperature_today[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -669,7 +367,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -682,7 +380,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax]?data_all.data.weather[index].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax]?data_all.data.weather[index].parameter[2].value[check_minmax]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax]?data_all.data.weather[i].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax]?data_all.data.weather[i].parameter[2].value[check_minmax]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -697,7 +395,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax]?data_all.data.weather[index].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax]?data_all.data.weather[index].parameter[1].value[check_minmax]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax]?data_all.data.weather[i].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax]?data_all.data.weather[i].parameter[1].value[check_minmax]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -718,7 +416,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[0]])}
+                                                            ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row ">
@@ -726,7 +424,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row ">
@@ -734,7 +432,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -755,7 +453,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1 " >
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1" ">
                                                                 Km/jam
@@ -766,7 +464,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2" ">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2">
                                                                 Km/jam
@@ -777,7 +475,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3" ">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -794,12 +492,7 @@ try {
                     </div>
                 </div>
 
-        `
-                slider.appendChild(temp_div)
-                if (data_tomorrow == true) {
-
-                    var temp_div2 = document.createElement("div")
-                    temp_div2.innerHTML = `
+        `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -807,7 +500,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -833,7 +526,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -864,7 +557,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -895,7 +588,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -920,7 +613,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -933,7 +626,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -948,7 +641,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -969,7 +662,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[0]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -977,7 +670,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -985,7 +678,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1006,7 +699,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1">
                                                                 Km/jam
@@ -1017,7 +710,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2">
                                                                 Km/jam
@@ -1028,7 +721,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -1043,14 +736,7 @@ try {
                             </div>
                         </div>
                     </div>
-                </div>`
-                    slider.appendChild(temp_div2)
-
-                }
-            } else if (temp_active == true && logger == false && logger_earthquake == false) {
-                temp_active = false
-                var temp_div = document.createElement("div")
-                temp_div.innerHTML = `  
+                </div>`,slider.appendChild(n)}}else if(!0==temp_active&&!1==logger&&!1==logger_earthquake){temp_active=!1;var o=document.createElement("div");if(o.innerHTML=`  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1058,7 +744,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -1084,7 +770,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[0]]?data_all.data.weather[index].parameter[5].value[temperature_today[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[0]]?data_all.data.weather[i].parameter[5].value[temperature_today[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1115,7 +801,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[1]]?data_all.data.weather[index].parameter[5].value[temperature_today[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[1]]?data_all.data.weather[i].parameter[5].value[temperature_today[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1147,7 +833,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[2]]?data_all.data.weather[index].parameter[5].value[temperature_today[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[2]]?data_all.data.weather[i].parameter[5].value[temperature_today[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1172,7 +858,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -1185,7 +871,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax]?data_all.data.weather[index].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax]?data_all.data.weather[index].parameter[2].value[check_minmax]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax]?data_all.data.weather[i].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax]?data_all.data.weather[i].parameter[2].value[check_minmax]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1200,7 +886,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax]?data_all.data.weather[index].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax]?data_all.data.weather[index].parameter[1].value[check_minmax]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax]?data_all.data.weather[i].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax]?data_all.data.weather[i].parameter[1].value[check_minmax]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1221,7 +907,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[0]])}
+                                                            ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1229,7 +915,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1237,7 +923,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1258,7 +944,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1" style="text-align:center;">
                                                                 Km/jam
@@ -1269,7 +955,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2">
                                                                 Km/jam
@@ -1280,7 +966,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -1297,12 +983,7 @@ try {
                     </div>
                 </div>
 
-        `
-                slider.appendChild(temp_div)
-                if (data_tomorrow == true) {
-
-                    var temp_div2 = document.createElement("div")
-                    temp_div2.innerHTML = `
+        `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1310,7 +991,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -1336,7 +1017,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1367,7 +1048,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1398,7 +1079,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1423,7 +1104,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -1436,7 +1117,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1451,7 +1132,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1472,7 +1153,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[0]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1480,7 +1161,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1488,7 +1169,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1509,7 +1190,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1">
                                                                 Km/jam
@@ -1520,7 +1201,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2">
                                                                 Km/jam
@@ -1531,7 +1212,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -1546,13 +1227,7 @@ try {
                             </div>
                         </div>
                     </div>
-                </div>`
-                    slider.appendChild(temp_div2)
-
-                }
-            } else {
-                var temp_div = document.createElement("div")
-                temp_div.innerHTML = `  
+                </div>`,slider.appendChild(n)}}else{var o=document.createElement("div");if(o.innerHTML=`  
             <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1560,7 +1235,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -1586,7 +1261,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[0]]?data_all.data.weather[index].parameter[5].value[temperature_today[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[0]]?data_all.data.weather[i].parameter[5].value[temperature_today[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1618,7 +1293,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[1]]?data_all.data.weather[index].parameter[5].value[temperature_today[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[1]]?data_all.data.weather[i].parameter[5].value[temperature_today[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1649,7 +1324,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_today[2]]?data_all.data.weather[index].parameter[5].value[temperature_today[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_today[2]]?data_all.data.weather[i].parameter[5].value[temperature_today[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1674,7 +1349,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - HARI INI
+                                    ${data_all.data.weather[i].city} - HARI INI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -1687,7 +1362,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax]?data_all.data.weather[index].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax]?data_all.data.weather[index].parameter[2].value[check_minmax]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax]?data_all.data.weather[i].parameter[4].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax]?data_all.data.weather[i].parameter[2].value[check_minmax]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1702,7 +1377,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax]?data_all.data.weather[index].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax]?data_all.data.weather[index].parameter[1].value[check_minmax]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax]?data_all.data.weather[i].parameter[3].value[check_minmax]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax]?data_all.data.weather[i].parameter[1].value[check_minmax]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1723,7 +1398,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                            ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[0]])}
+                                                            ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1731,7 +1406,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1739,7 +1414,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_today[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_today[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1760,7 +1435,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1" style="text-align:center;" >
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1">
                                                                 Km/jam
@@ -1771,7 +1446,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2"  style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2" >
                                                                 Km/jam
@@ -1782,7 +1457,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3"  style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_today[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_today[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -1800,11 +1475,7 @@ try {
                 </div>
 
                
-         `
-                slider.appendChild(temp_div)
-                if (data_tomorrow == true) {
-                    var temp_div2 = document.createElement("div")
-                    temp_div2.innerHTML = `
+         `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1812,7 +1483,7 @@ try {
                             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data1" style="text-align: center; font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:15px; ">
@@ -1838,7 +1509,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[0]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[0]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1869,7 +1540,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[1]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[1]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1900,7 +1571,7 @@ try {
                                                             <div class="card-front__bt">
                                                                 <p
                                                                     class="card-front__text-view card-front__text-view--camping">
-                                                                    ${data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[index].parameter[5].value[temperature_tomorrow[2]]:"-"} ( °C )
+                                                                    ${data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]?data_all.data.weather[i].parameter[5].value[temperature_tomorrow[2]]:"-"} ( \xb0C )
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1925,7 +1596,7 @@ try {
                                 style="background-color: rgba(0, 0, 0, .4)  ;  height: 425px; width: auto; margin: 10px; border-radius: 50px;">
                                 <div class="title_jadwaldata1" style="width:900px;">
                                     <div id="jadwal_data2" style="text-align: center;  font-size: 30px;">
-                                    ${data_all.data.weather[index].city} - ESOK HARI
+                                    ${data_all.data.weather[i].city} - ESOK HARI
                                     </div>
                                 </div>
                                 <div class="row " style="margin-top:15px;">
@@ -1938,7 +1609,7 @@ try {
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <p class="card-text" id="suhu" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[2].value[check_minmax_tomorrow]:"-"} ( °C )
+                                                    ${data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[4].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[2].value[check_minmax_tomorrow]:"-"} ( \xb0C )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1953,7 +1624,7 @@ try {
                                                 </div>
                                                 <div  style="text-align: center;">
                                                     <p class="card-text" id="kelembapan" style="font-size: 40px; font-weight:400;">
-                                                    ${data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[index].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
+                                                    ${data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[3].value[check_minmax_tomorrow]:"-"} - ${data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]?data_all.data.weather[i].parameter[1].value[check_minmax_tomorrow]:"-"} ( % )
                                                     </p>
                                                 </div>
                                             </div>
@@ -1974,7 +1645,7 @@ try {
                                                             Pagi
                                                         </div>
                                                         <div class="col" id="arah1">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[0]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[0]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1982,7 +1653,7 @@ try {
                                                             Siang
                                                         </div>
                                                         <div class="col" id="arah2">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[1]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[1]])}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -1990,7 +1661,7 @@ try {
                                                             Malam
                                                         </div>
                                                         <div class="col" id="arah3">
-                                                        ${convert.toCompass(data_all.data.weather[index].parameter[7].value[wind_direction_tomorrow[2]])}
+                                                        ${convert.toCompass(data_all.data.weather[i].parameter[7].value[wind_direction_tomorrow[2]])}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2011,7 +1682,7 @@ try {
                                                                 Pagi
                                                             </div>
                                                             <div class="col" id="kecepatan1" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[0]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan1">
                                                                 Km/jam
@@ -2022,7 +1693,7 @@ try {
                                                                 Siang
                                                             </div>
                                                             <div class="col" id="kecepatan2" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[1]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan2">
                                                                 Km/jam
@@ -2033,7 +1704,7 @@ try {
                                                                 Malam
                                                             </div>
                                                             <div class="col" id="kecepatan3" style="text-align:center;">
-                                                            ${data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[index].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
+                                                            ${data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]?data_all.data.weather[i].parameter[8].value[wind_speed_tomorrow[2]]:"-"}
                                                             </div>
                                                             <div class="col" id="kecepatan3">
                                                                 Km/jam
@@ -2048,25 +1719,7 @@ try {
                             </div>
                         </div>
                     </div>
-                </div>`
-                    slider.appendChild(temp_div2)
-
-                }
-            }
-
-        } else {
-            list_data = false
-        }
-
-    }
-} catch {
-    list_data = false
-}
-//data belum terupdate
-if (list_data == false) {
-    if (logger == false && logger_earthquake == false) {
-        var div_last_page = document.createElement("div")
-        div_last_page.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
+                </div>`,slider.appendChild(n)}}}else list_data=!1}}catch{list_data=!1}if(!1==list_data){if(!1==logger&&!1==logger_earthquake){var v=document.createElement("div");v.innerHTML=`<div class="carousel-item active" data-bs-interval="5000">
         <div>
             <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
                 <div class=" "
@@ -2079,11 +1732,7 @@ if (list_data == false) {
         
                 </div>
             </div>
-        </div>`
-        slider.appendChild(div_last_page)
-    } else {
-        var div_last_page = document.createElement("div")
-        div_last_page.innerHTML = `<div class="carousel-item " data-bs-interval="5000">
+        </div>`,slider.appendChild(v)}else{var v=document.createElement("div");v.innerHTML=`<div class="carousel-item " data-bs-interval="5000">
     <div>
         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
             <div class=" "
@@ -2095,7 +1744,4 @@ if (list_data == false) {
                     </div>
             </div>
         </div>
-    </div>`
-        slider.appendChild(div_last_page)
-    }
-}
+    </div>`,slider.appendChild(v)}}
