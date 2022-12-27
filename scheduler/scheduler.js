@@ -1,25 +1,24 @@
 const schedule = require('node-schedule');
+const axios = require('axios');
+const fs = require('fs');
 const moment = require('moment');
 
 async function createfile(){
     try {
-        let res = await fetch(`http://localhost:3000/weather/create/${moment().format('DD-MM-YYYY')}`,{
-            method: 'GET',
-            redirect: 'follow',
-            headers:{}
-        });
-        // console.log(await res.json());
-        // fs.writeFileSync('../assets/data/'+moment().format('DD-MM-YYYY')+'.json', new Buffer(await res.json()));
-        fs.writeFileSync("./assets/data/foo.txt", "bar");
+        var logs = fs.readFileSync('./assets/logs.txt', 'utf8');
+        let res = await axios({method: 'get',url: 'http://localhost:3344/generatebmkgjs/',headers: { }});
+        if (res.status == 200) {
+            return fs.writeFileSync("./assets/logs.txt",logs +"\n"+ moment() + ' : successfully generated')
+        }
         if (res.status != 200) {
             return createfile();
         }
     } catch (e) {
-        console.log(e.message);
+        fs.writeFileSync("./assets/logs.txt",logs +"\n"+ moment() +" : "+ e.message)
         createfile();
     }
 }
-//10 minutes
-// schedule.scheduleJob('* * * * * *', function(fireDate){
-//     createfile();
-// });
+
+schedule.scheduleJob('* */30 * * * *', function(fireDate){
+    createfile();
+});
