@@ -19,6 +19,6 @@ async function createfile(){
     }
 }
 
-schedule.scheduleJob('* */30 * * * *', function(fireDate){
+schedule.scheduleJob('1 */30 * * * *', function(fireDate){
     createfile();
 });
