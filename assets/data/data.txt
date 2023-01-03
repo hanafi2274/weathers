@@ -75,16 +75,16 @@ var check_index_weather = [],
     wind_direction_today = [],
     wind_direction_tomorrow = [];
 try {
-    var tanggal,bulan
-    if(d.getDate()<10){
-        tanggal=("0" + d.getDate()).slice(-2)
-    }else{
-        tanggal=d.getDate()
+    var tanggal, bulan
+    if (d.getDate() < 10) {
+        tanggal = ("0" + d.getDate()).slice(-2)
+    } else {
+        tanggal = d.getDate()
     }
-    if((d.getMonth()+1)<10){
-        bulan=("0" + (d.getMonth() + 1)).slice(-2)
-    }else{
-        bulan=d.getMonth()+1
+    if ((d.getMonth() + 1) < 10) {
+        bulan = ("0" + (d.getMonth() + 1)).slice(-2)
+    } else {
+        bulan = d.getMonth() + 1
     }
     if (data_all.data.logger.datetime && data_all.data.logger.datetime.slice(0, 8) === `${tanggal}${bulan}${d.getFullYear()}`) {
         list_data = !0, logger = !0;
@@ -176,13 +176,13 @@ try {
                 </div>
                 <div class="col" style="margin-left: 20px;">
                     <img src="./sidefiles/gempa.jpg" alt="...."
-                        style="width: 400px; height: 350px; align-content: center; border-radius: 5px;">
+                        style="width: 400px; height: 370px; align-content: center; border-radius: 5px;">
                 </div>
                 <div class="col" style="margin-right: 60px;">
-                    <div class="card" style="font-size:19px;width: 300px; height: auto; border-color: transparent;">
+                    <div class="card" style="font-size:15px;width: 300px; height: auto; border-color: transparent;">
                         <div>
                             <div class="text-color"
-                                style="background-color: #202977; width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+                                style="background-color: #202977; width: 400px; height: 370px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
 
                                 <div style="margin-left:10px">
                                     <div class="row">
@@ -245,7 +245,7 @@ try {
 
                                 </div>
                                 <div style="text-align: center;">
-                                    GEMPA INI DIRASAKAN UNTUK DITERUSKAN PADA MASYARAKAT
+                                   ${data_all.data.earthquake.Potensi}
                                 </div>
                             </div>
 
@@ -270,13 +270,13 @@ try {
                 </div>
                 <div class="col" style="margin-left: 20px;">
                     <img src="./sidefiles/gempa.jpg" alt="...."
-                        style="width: 400px; height: 350px; align-content: center; border-radius: 5px;">
+                        style="width: 400px; height: 370px; align-content: center; border-radius: 5px;">
                 </div>
                 <div class="col" style="margin-right: 60px;">
-                    <div class="card" style="font-size:19px;width: 300px; height: auto; border-color: transparent;">
+                    <div class="card" style="font-size:15px;width: 300px; height: auto; border-color: transparent;">
                         <div>
                             <div class="text-color"
-                                style="background-color: #202977; width: 400px; height: 350px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
+                                style="background-color: #202977; width: 400px; height: 370px;margin-top: 20px;  border-radius: 20px; box-shadow: black ;">
 
                                 <div style="margin-left:10px">
                                     <div class="row">
@@ -339,7 +339,8 @@ try {
 
                                 </div>
                                 <div style="text-align: center;">
-                                    GEMPA INI DIRASAKAN UNTUK DITERUSKAN PADA MASYARAKAT
+                                 ${data_all.data.earthquake.Potensi}
+
                                 </div>
                             </div>
 
