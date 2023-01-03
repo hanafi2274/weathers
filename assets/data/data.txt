@@ -1,4 +1,95 @@
-const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquake_datetime=`${a.getDate()}-${a.getMonth()+1}-${a.getFullYear()}`}catch{}var arah_angin,check_day,check_minmax,check_minmax_tomorrow,data_tomorrow,slider=document.getElementById("start_slider");slider.innerHTML="";const days=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"],months=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];function showTime(){let a=new Date,e=a.getHours(),t=a.getMinutes(),i=a.getSeconds(),r=(e=e<10?"0"+e:e)+":"+(t=t<10?"0"+t:t)+":"+(i=i<10?"0"+i:i);document.getElementById("jam_digital").innerHTML=r}function kode_cuaca(a){if(0==a)return"Cerah";if(1==a)return"Cerah Berawan";if(2==a)return"Cerah Berawan";if(3==a)return"Berawan";if(4==a)return"Berawan Tebal";else if(5==a)return"Udara Kabur";else if(10==a)return"Asap";else if(45==a)return"Kabut";else if(60==a)return"Hujan Ringan";else if(61==a)return"Hujan Lebat";else if(80==a)return"Hujan Lokal";else if(95==a)return"Hujan Petir";else if(97==a)return"Hujan Petir";else return"-"}setInterval(showTime,1e3),showTime();var convert={toCompass:function(a){return a?["Utara","Utara-Timur Laut","Timur Laut","Timur-Timur Laut","Timur","Timur-Tenggara","Tenggara","Selatan-Tenggara","Selatan","Selatan-Barat Daya","Barat Daya","Barat-Barat Daya","Barat","Barat-Barat Laut","Barat Laut","Utara-Barat Laut","Utara"][Math.round(a/11.25/2)]:"-"}};function rotateCompas(a){return a?[0,22.5,45,67.5,90,112.5,135,157.5,180,202.5,225,247.5,270,292.5,315,337.5,360][Math.round(a/11.25/2)]:"-"}function checkIfImageExists(a,e){let t=new Image;t.src=a,t.complete?e(!0):(t.onload=()=>{e(!0)},t.onerror=()=>{e(!1)})}var check_bg="./sidefiles/background.jpg";checkIfImageExists(check_bg),checkIfImageExists("./sidefiles/background.jpg",a=>{a?document.getElementById("background").style.backgroundImage=`url('${check_bg}')`:document.getElementById("background").style.backgroundImage="linear-gradient(#06085a,#2440bb)"});var earthquake_datetime,tanggal_temp,list_data,logger=!1,logger_earthquake=!1,temp_active=!0;let day=days[d.getDay()],month=months[d.getMonth()];function ms(a){return(kmh=(36*a).toFixed(1)).toString()}document.getElementById("tanggal").innerHTML=`${day}, ${d.getDate()} ${month} ${d.getFullYear()}`;var check_index_weather=[],check_index_weather_tomorrow=[],temperature_today=[],temperature_tomorrow=[],wind_speed_today=[],wind_speed_tomorrow=[],wind_direction_today=[],wind_direction_tomorrow=[];try{if(data_all.data.logger.datetime&&data_all.data.logger.datetime.slice(0,8)==`${d.getDate()}${d.getMonth()+1}${d.getFullYear()}`){list_data=!0,logger=!0;var e=document.createElement("div");e.innerHTML=`<div class="carousel-item active" data-bs-interval="5000">
+const d = new Date;
+try {
+    let a = new Date(data_all.data.earthquake.DateTime);
+    earthquake_datetime = `${a.getDate()}-${a.getMonth()+1}-${a.getFullYear()}`
+} catch {}
+var arah_angin, check_day, check_minmax, check_minmax_tomorrow, data_tomorrow, slider = document.getElementById("start_slider");
+slider.innerHTML = "";
+const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+    months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+function showTime() {
+    let a = new Date,
+        e = a.getHours(),
+        t = a.getMinutes(),
+        i = a.getSeconds(),
+        r = (e = e < 10 ? "0" + e : e) + ":" + (t = t < 10 ? "0" + t : t) + ":" + (i = i < 10 ? "0" + i : i);
+    document.getElementById("jam_digital").innerHTML = r
+}
+
+function kode_cuaca(a) {
+    if (0 == a) return "Cerah";
+    if (1 == a) return "Cerah Berawan";
+    if (2 == a) return "Cerah Berawan";
+    if (3 == a) return "Berawan";
+    if (4 == a) return "Berawan Tebal";
+    else if (5 == a) return "Udara Kabur";
+    else if (10 == a) return "Asap";
+    else if (45 == a) return "Kabut";
+    else if (60 == a) return "Hujan Ringan";
+    else if (61 == a) return "Hujan Lebat";
+    else if (80 == a) return "Hujan Lokal";
+    else if (95 == a) return "Hujan Petir";
+    else if (97 == a) return "Hujan Petir";
+    else return "-"
+}
+setInterval(showTime, 1e3), showTime();
+var convert = {
+    toCompass: function (a) {
+        return a ? ["Utara", "Utara-Timur Laut", "Timur Laut", "Timur-Timur Laut", "Timur", "Timur-Tenggara", "Tenggara", "Selatan-Tenggara", "Selatan", "Selatan-Barat Daya", "Barat Daya", "Barat-Barat Daya", "Barat", "Barat-Barat Laut", "Barat Laut", "Utara-Barat Laut", "Utara"][Math.round(a / 11.25 / 2)] : "-"
+    }
+};
+
+function rotateCompas(a) {
+    return a ? [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5, 360][Math.round(a / 11.25 / 2)] : "-"
+}
+
+function checkIfImageExists(a, e) {
+    let t = new Image;
+    t.src = a, t.complete ? e(!0) : (t.onload = () => {
+        e(!0)
+    }, t.onerror = () => {
+        e(!1)
+    })
+}
+var check_bg = "./sidefiles/background.jpg";
+checkIfImageExists(check_bg), checkIfImageExists("./sidefiles/background.jpg", a => {
+    a ? document.getElementById("background").style.backgroundImage = `url('${check_bg}')` : document.getElementById("background").style.backgroundImage = "linear-gradient(#06085a,#2440bb)"
+});
+var earthquake_datetime, tanggal_temp, list_data, logger = !1,
+    logger_earthquake = !1,
+    temp_active = !0;
+let day = days[d.getDay()],
+    month = months[d.getMonth()];
+
+function ms(a) {
+    return (kmh = (36 * a).toFixed(1)).toString()
+}
+document.getElementById("tanggal").innerHTML = `${day}, ${d.getDate()} ${month} ${d.getFullYear()}`;
+var check_index_weather = [],
+    check_index_weather_tomorrow = [],
+    temperature_today = [],
+    temperature_tomorrow = [],
+    wind_speed_today = [],
+    wind_speed_tomorrow = [],
+    wind_direction_today = [],
+    wind_direction_tomorrow = [];
+try {
+    var tanggal,bulan
+    if(d.getDate()<10){
+        tanggal=("0" + d.getDate()).slice(-2)
+    }else{
+        tanggal=d.getDate()
+    }
+    if((d.getMonth()+1)<10){
+        bulan=("0" + (d.getMonth() + 1)).slice(-2)
+    }else{
+        bulan=d.getMonth()+1
+    }
+    if (data_all.data.logger.datetime && data_all.data.logger.datetime.slice(0, 8) === `${tanggal}${bulan}${d.getFullYear()}`) {
+        list_data = !0, logger = !0;
+        var e = document.createElement("div");
+        e.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
         <div style="  height: 500px; width: auto;">
             <div class=" "
                 style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -65,7 +156,16 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
         
             </div>
         </div>
-        </div>`,slider.appendChild(e),document.getElementById("base_compas").style.transform=`rotate(${rotateCompas(data_all.data.logger.wind_direction_degree)}deg)`}}catch{}try{if(data_all.data.earthquake.Jam&&earthquake_datetime===`${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`){if(!0==logger){var t=document.createElement("div");t.innerHTML=`<div class="carousel-item ">
+        </div>`, slider.appendChild(e), document.getElementById("base_compas").style.transform = `rotate(${rotateCompas(data_all.data.logger.wind_direction_degree)}deg)`
+    }
+} catch {}
+try {
+    console.log(earthquake_datetime)
+    console.log(`${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`)
+    if (data_all.data.earthquake.Jam && earthquake_datetime === `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`) {
+        if (!0 == logger) {
+            var t = document.createElement("div");
+            t.innerHTML = `<div class="carousel-item ">
      <div style="  height: 500px; width: auto; ">
         <div class=" "
             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -155,7 +255,11 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
             </div>
         </div>
     </div>
-</div>`,slider.appendChild(t)}else{logger_earthquake=!0;var t=document.createElement("div");t.innerHTML=`<div class="carousel-item active">
+</div>`, slider.appendChild(t)
+        } else {
+            logger_earthquake = !0;
+            var t = document.createElement("div");
+            t.innerHTML = `<div class="carousel-item active">
     <div style="  height: 500px; width: auto; ">
         <div class=" "
             style="background-color: rgba(0, 0, 0, .4)  ; height: 425px; width: auto; margin: 10px; border-radius: 50px; ">
@@ -245,7 +349,25 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
             </div>
         </div>
     </div>
-</div>`,slider.appendChild(t)}}}catch{}try{for(let i=0;i<data_all.data.weather.length;i++){try{check_index_weather=[],check_index_weather_tomorrow=[],temperature_today=[],temperature_tomorrow=[],wind_speed_today=[],wind_speed_tomorrow=[],wind_direction_today=[],wind_direction_tomorrow=[];for(let r=0;r<data_all.data.weather[i].parameter[5].datetime.length;r++)data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?temperature_today[0]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?temperature_today[1]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(temperature_today[2]=r),data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?temperature_tomorrow[0]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?temperature_tomorrow[1]=r:data_all.data.weather[i].parameter[5].datetime[r]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(temperature_tomorrow[2]=r);for(let s=0;s<data_all.data.weather[i].parameter[6].datetime.length;s++)data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?check_index_weather[0]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?check_index_weather[1]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(check_index_weather[2]=data_all.data.weather[i].parameter[6].value[s]),data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?check_index_weather_tomorrow[0]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?check_index_weather_tomorrow[1]=data_all.data.weather[i].parameter[6].value[s]:data_all.data.weather[i].parameter[6].datetime[s]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(check_index_weather_tomorrow[2]=data_all.data.weather[i].parameter[6].value[s]);for(let c=0;c<data_all.data.weather[i].parameter[7].datetime.length;c++)data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?wind_direction_today[0]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?wind_direction_today[1]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(wind_direction_today[2]=c),data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?wind_direction_tomorrow[0]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?wind_direction_tomorrow[1]=c:data_all.data.weather[i].parameter[7].datetime[c]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(wind_direction_tomorrow[2]=c);for(let l=0;l<data_all.data.weather[i].parameter[8].datetime.length;l++)data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}0600`?wind_speed_today[0]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1200`?wind_speed_today[1]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}1800`&&(wind_speed_today[2]=l),data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}0600`?wind_speed_tomorrow[0]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1200`?wind_speed_tomorrow[1]=l:data_all.data.weather[i].parameter[8].datetime[l]===`${d.getFullYear()}${d.getMonth()+1}${d.getDate()+1}1800`&&(wind_speed_tomorrow[2]=l);data_all.data.weather[i].parameter[6].datetime[1].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`?(check_day=1,check_minmax_tomorrow=1,check_minmax=0,data_tomorrow=!0):data_all.data.weather[i].parameter[6].datetime[5].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`?(check_day=5,check_minmax=1,check_minmax_tomorrow=2,data_tomorrow=!0):data_all.data.weather[i].parameter[6].datetime[9].slice(0,8)==`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`&&(check_day=9,check_minmax=2,data_tomorrow=!1)}catch{}if(check_day){if(list_data=!0,0==i&&!1==logger&&!1==logger_earthquake){temp_active=!1;var o=document.createElement("div");if(o.innerHTML=`  
+</div>`, slider.appendChild(t)
+        }
+    }
+} catch {}
+try {
+    for (let i = 0; i < data_all.data.weather.length; i++) {
+        try {
+            check_index_weather = [], check_index_weather_tomorrow = [], temperature_today = [], temperature_tomorrow = [], wind_speed_today = [], wind_speed_tomorrow = [], wind_direction_today = [], wind_direction_tomorrow = [];
+            for (let r = 0; r < data_all.data.weather[i].parameter[5].datetime.length; r++) data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${tanggal}0600` ? temperature_today[0] = r : data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${tanggal}1200` ? temperature_today[1] = r : data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${tanggal}1800` && (temperature_today[2] = r), data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}0600` ? temperature_tomorrow[0] = r : data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1200` ? temperature_tomorrow[1] = r : data_all.data.weather[i].parameter[5].datetime[r] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1800` && (temperature_tomorrow[2] = r);
+            for (let s = 0; s < data_all.data.weather[i].parameter[6].datetime.length; s++) data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${tanggal}0600` ? check_index_weather[0] = data_all.data.weather[i].parameter[6].value[s] : data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${tanggal}1200` ? check_index_weather[1] = data_all.data.weather[i].parameter[6].value[s] : data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${tanggal}1800` && (check_index_weather[2] = data_all.data.weather[i].parameter[6].value[s]), data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}0600` ? check_index_weather_tomorrow[0] = data_all.data.weather[i].parameter[6].value[s] : data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1200` ? check_index_weather_tomorrow[1] = data_all.data.weather[i].parameter[6].value[s] : data_all.data.weather[i].parameter[6].datetime[s] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1800` && (check_index_weather_tomorrow[2] = data_all.data.weather[i].parameter[6].value[s]);
+            for (let c = 0; c < data_all.data.weather[i].parameter[7].datetime.length; c++) data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${tanggal}0600` ? wind_direction_today[0] = c : data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${tanggal}1200` ? wind_direction_today[1] = c : data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${tanggal}1800` && (wind_direction_today[2] = c), data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}0600` ? wind_direction_tomorrow[0] = c : data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1200` ? wind_direction_tomorrow[1] = c : data_all.data.weather[i].parameter[7].datetime[c] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1800` && (wind_direction_tomorrow[2] = c);
+            for (let l = 0; l < data_all.data.weather[i].parameter[8].datetime.length; l++) data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${tanggal}0600` ? wind_speed_today[0] = l : data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${tanggal}1200` ? wind_speed_today[1] = l : data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${tanggal}1800` && (wind_speed_today[2] = l), data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}0600` ? wind_speed_tomorrow[0] = l : data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1200` ? wind_speed_tomorrow[1] = l : data_all.data.weather[i].parameter[8].datetime[l] === `${d.getFullYear()}${bulan}${d.getDate()<10?("0" +(Number(tanggal)+1)):(d.getDate()+1)}1800` && (wind_speed_tomorrow[2] = l);
+            data_all.data.weather[i].parameter[6].datetime[1].slice(0, 8) == `${d.getFullYear()}${bulan}${tanggal}` ? (check_day = 1, check_minmax_tomorrow = 1, check_minmax = 0, data_tomorrow = !0) : data_all.data.weather[i].parameter[6].datetime[5].slice(0, 8) == `${d.getFullYear()}${bulan}${tanggal}` ? (check_day = 5, check_minmax = 1, check_minmax_tomorrow = 2, data_tomorrow = !0) : data_all.data.weather[i].parameter[6].datetime[9].slice(0, 8) == `${d.getFullYear()}${bulan}${tanggal}` && (check_day = 9, check_minmax = 2, data_tomorrow = !1)
+        } catch {}
+        if (check_day) {
+            if (list_data = !0, 0 == i && !1 == logger && !1 == logger_earthquake) {
+                temp_active = !1;
+                var o = document.createElement("div");
+                if (o.innerHTML = `  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -492,7 +614,9 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                     </div>
                 </div>
 
-        `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
+        `, slider.appendChild(o), !0 == data_tomorrow) {
+                    var n = document.createElement("div");
+                    n.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -736,7 +860,12 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                             </div>
                         </div>
                     </div>
-                </div>`,slider.appendChild(n)}}else if(!0==temp_active&&!1==logger&&!1==logger_earthquake){temp_active=!1;var o=document.createElement("div");if(o.innerHTML=`  
+                </div>`, slider.appendChild(n)
+                }
+            } else if (!0 == temp_active && !1 == logger && !1 == logger_earthquake) {
+                temp_active = !1;
+                var o = document.createElement("div");
+                if (o.innerHTML = `  
             <div class="carousel-item active " data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -983,7 +1112,9 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                     </div>
                 </div>
 
-        `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
+        `, slider.appendChild(o), !0 == data_tomorrow) {
+                    var n = document.createElement("div");
+                    n.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1227,7 +1358,11 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                             </div>
                         </div>
                     </div>
-                </div>`,slider.appendChild(n)}}else{var o=document.createElement("div");if(o.innerHTML=`  
+                </div>`, slider.appendChild(n)
+                }
+            } else {
+                var o = document.createElement("div");
+                if (o.innerHTML = `  
             <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1475,7 +1610,9 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                 </div>
 
                
-         `,slider.appendChild(o),!0==data_tomorrow){var n=document.createElement("div");n.innerHTML=`
+         `, slider.appendChild(o), !0 == data_tomorrow) {
+                    var n = document.createElement("div");
+                    n.innerHTML = `
                 <div class="carousel-item" data-bs-interval="5000">
                     <div>
                         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
@@ -1719,7 +1856,18 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                             </div>
                         </div>
                     </div>
-                </div>`,slider.appendChild(n)}}}else list_data=!1}}catch{list_data=!1}if(!1==list_data){if(!1==logger&&!1==logger_earthquake){var v=document.createElement("div");v.innerHTML=`<div class="carousel-item active" data-bs-interval="5000">
+                </div>`, slider.appendChild(n)
+                }
+            }
+        } else list_data = !1
+    }
+} catch {
+    list_data = !1
+}
+if (!1 == list_data) {
+    if (!1 == logger && !1 == logger_earthquake) {
+        var v = document.createElement("div");
+        v.innerHTML = `<div class="carousel-item active" data-bs-interval="5000">
         <div>
             <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
                 <div class=" "
@@ -1732,7 +1880,10 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
         
                 </div>
             </div>
-        </div>`,slider.appendChild(v)}else{var v=document.createElement("div");v.innerHTML=`<div class="carousel-item " data-bs-interval="5000">
+        </div>`, slider.appendChild(v)
+    } else {
+        var v = document.createElement("div");
+        v.innerHTML = `<div class="carousel-item " data-bs-interval="5000">
     <div>
         <div class="text-color" style="background-color:transparent; height: 500px; width: auto; ">
             <div class=" "
@@ -1744,4 +1895,6 @@ const d=new Date;try{let a=new Date(data_all.data.earthquake.DateTime);earthquak
                     </div>
             </div>
         </div>
-    </div>`,slider.appendChild(v)}}
+    </div>`, slider.appendChild(v)
+    }
+}
