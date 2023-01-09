@@ -1913,6 +1913,7 @@ try {
     }
 } catch {
     list_data = !1
+    
 }
 if (!1 == list_data) {
     if (!1 == logger && !1 == logger_earthquake) {
