@@ -85,6 +85,6 @@ exports.index = async (req, res) => {
 };
 
 exports.base = async (req, res) => {
-    return res.render('home');
+    return res.render('page');
     return console.log(res.status(200).json({status:200,message:''}));
-};
+}; 
