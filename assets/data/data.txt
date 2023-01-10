@@ -751,7 +751,7 @@ try {
                                                                 style="text-transform: uppercase;">
                                                                 <p style="font-size:30px; transform:translateY(-30px);">Malam</p>
                                                            
-                                                                <img src="/sidefiles/${check_index_weather_tomorrow[2]}pm.png"
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[2]}pm.png"
                                                                     style="width:100px; transform:translateY(-20px);" alt="...">
                                                           
                                                             <p class="card-front__text-price">
@@ -1249,7 +1249,7 @@ try {
                                                                 style="text-transform: uppercase;">
                                                                 <p style="font-size:30px; transform:translateY(-30px);">Malam</p>
                                                            
-                                                                <img src="/sidefiles/${check_index_weather_tomorrow[2]}pm.png"
+                                                                <img src="./sidefiles/${check_index_weather_tomorrow[2]}pm.png"
                                                                     style="width:100px; transform:translateY(-20px);" alt="...">
                                                           
                                                             <p class="card-front__text-price">
