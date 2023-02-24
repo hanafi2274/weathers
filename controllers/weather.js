@@ -17,7 +17,7 @@ exports.index = async (req, res) => {
         }
         
         let bmkg_earthquake2 = await axios({method: 'get',url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',headers: { }});
-        let result = await axios({method: 'get',url: `http://202.90.198.212/logger/log-${tgl}.txt`,headers: { }});
+        let result = await axios({method: 'get',url: `http://202.90.198.212/logger/logAAWS-${tgl}.txt`,headers: { }});
         let bmkg_weather = await axios({method: 'get',url: `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/${area}`,headers: { }});
         bmkg_earthquake2 = bmkg_earthquake2.data;
         result = result.data;
@@ -27,7 +27,37 @@ exports.index = async (req, res) => {
         var stw18 = Array.filter(function(data){
             return data.includes('STW1018;')
         });
-        let data_txt = ((stw18[stw18.length - 1]).replace('\n','')).split(';');
+        let data_txt,logger
+        if (stw18[0]) {
+            data_txt = ((stw18[stw18.length - 1]).replace('\n','')).split(';');
+            logger = {
+                "datetime":data_txt[1],
+                "wind_speed":data_txt[2],
+                "wind_direction_degree":data_txt[3],
+                "temperature":data_txt[4],
+                "rh":data_txt[5],
+                "pressure_mbar":data_txt[6],
+                "solar_radiasi":data_txt[7],
+                "hujan":data_txt[8],
+                "tegangan_baterai":data_txt[9],
+                "temperature_logger":data_txt[10]
+            }
+        } else {
+            data_txt=[]
+            logger = {
+                "datetime":'-',
+                "wind_speed":'-',
+                "wind_direction_degree":'-',
+                "temperature":'-',
+                "rh":'-',
+                "pressure_mbar":'-',
+                "solar_radiasi":'-',
+                "hujan":'-',
+                "tegangan_baterai":'-',
+                "temperature_logger":'-'
+            }
+        }
+        
         
         var xml2jsn,parameters=[],tr=[],vl=[],typ=[]
         parseString.parseString(bmkg_weather, (err, result) => {
@@ -58,23 +88,16 @@ exports.index = async (req, res) => {
                     tr = []
                     typ=[]
                 }
+                console.log(allCity.name[1]._);
+                if (allCity.name[1]._.includes('surabaya')) {
+                    
+                }
                 cities.push({city:allCity.name[1]._,parameter:parameters})
                 parameters=[]
             }
         }
 
-        const logger = {
-            "datetime":data_txt[1],
-            "wind_speed":data_txt[2],
-            "wind_direction_degree":data_txt[3],
-            "temperature":data_txt[4],
-            "rh":data_txt[5],
-            "pressure_mbar":data_txt[6],
-            "solar_radiasi":data_txt[7],
-            "hujan":data_txt[8],
-            "tegangan_baterai":data_txt[9],
-            "temperature_logger":data_txt[10]
-        }
+        
         var data_js = fs.readFileSync('./assets/data/data.txt', 'utf8');
         fs.writeFileSync("./assets/data/weather.js",`var data_all=${JSON.stringify({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:bmkg_earthquake2.Infogempa.gempa}})};\n`+data_js);
         return res.status(200).json({status:200,message:'success',path:'/assets/data/weather.js'});
