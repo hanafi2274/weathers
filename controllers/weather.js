@@ -72,31 +72,28 @@ exports.index = async (req, res) => {
         delete all_cities[all_cities.length-1]
         for (const allCity of all_cities) {
             if (allCity) {
-                for (const i of allCity.parameter) {
-                    for (const i2 of i.timerange) {
-                        tr.push(i2.$.datetime)
-                        vl.push(Number(i2.value[0]._))
+                if (allCity.name[1]._.includes('Surabaya')||allCity.name[1]._.includes('Bangkalan')||allCity.name[1]._.includes('Mojokerto')||allCity.name[1]._.includes('Sidoarjo')||allCity.name[1]._.includes('Lamongan')) {
+                    for (const i of allCity.parameter) {
+                        for (const i2 of i.timerange) {
+                            tr.push(i2.$.datetime)
+                            vl.push(Number(i2.value[0]._))
+                        }
+                        typ.push(i.$.type)
+                        parameters.push({
+                            parameter:i.$.description,
+                            datetime:tr,
+                            value:vl,
+                            type:typ,
+                        })
+                        vl = []
+                        tr = []
+                        typ=[]
                     }
-                    typ.push(i.$.type)
-                    parameters.push({
-                        parameter:i.$.description,
-                        datetime:tr,
-                        value:vl,
-                        type:typ,
-                    })
-                    vl = []
-                    tr = []
-                    typ=[]
-                }
-                console.log(allCity.name[1]._);
-                if (allCity.name[1]._.includes('surabaya')) {
-                    
                 }
                 cities.push({city:allCity.name[1]._,parameter:parameters})
                 parameters=[]
             }
         }
-
         
         var data_js = fs.readFileSync('./assets/data/data.txt', 'utf8');
         fs.writeFileSync("./assets/data/weather.js",`var data_all=${JSON.stringify({status:200,message:'success',timestamps:moment().unix(),data:{logger:logger,weather:cities,earthquake:bmkg_earthquake2.Infogempa.gempa}})};\n`+data_js);
